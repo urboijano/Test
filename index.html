@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Everrest Medical Hospital</title>
+    <link rel="icon" type="image/png" href="[Logo] Blue (no bg).png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap');
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background: url('2.png') no-repeat center center fixed;
+            background-size: cover
+        }
+
+        /* Dark overlay for contrast */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        /* Ensure the left side image fits well */
+        .image-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Modal Styles */
+        .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('2.png') no-repeat center center; /* Set image as background */
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        padding: 20px;
+        overflow-y: auto;
+        }
+
+        .modal-content {
+    padding: 20px;
+    border-radius: 0; /* Remove rounded corners */
+    width: 100vw; /* Full viewport width */
+    height: 100vh; /* Full viewport height */
+    max-width: 100vw;
+    max-height: 100vh;
+    overflow: hidden; /* Prevent scrolling inside modal */
+    box-shadow: none; /* Remove shadow if not needed */
+    text-align: left;
+    position: fixed; /* Ensure it covers the screen */
+    top: 0;
+    left: 0;
+}
+
+        /* Fix Close Button */
+        .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #333;
+        }
+
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100 relative">
+
+    <!-- Dark Overlay -->
+    <div class="overlay"></div>
+
+    <!-- Form Container -->
+    <div class="flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden w-3/4 max-w-4xl relative" style="border-radius: 15px;">
+
+        <!-- Left Side: Image -->
+        <div class="md:w-1/2 h-96 md:h-auto">
+            <div class="image-container">
+                <img src="bg.png" alt="Medical background image" />
+            </div>
+        </div>
+
+        <!-- Right Side: Form -->
+        <div class="md:w-1/2 p-8">
+            <h1 class="text-3xl font-bold text-blue-700 text-center tracking-wide">EVERREST</h1>
+            <h2 class="text-xl text-cyan-400 text-center tracking-wide">MEDICAL HOSPITAL</h2>
+            <h3 class="text-2xl font-semibold mt-6 text-center">Get Started</h3>
+
+            <form id="registerForm" class="mt-6">
+                <div class="mb-4">
+                    <label class="block text-gray-700">Name</label>
+                    <input id="name" class="w-full mt-2 p-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500" type="text"/>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700">Email</label>
+                    <input id="email" class="w-full mt-2 p-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500" type="email"/>
+                </div>
+                <div class="mb-4 relative">
+                    <label class="block text-gray-700">Password</label>
+                    <input id="password" class="w-full mt-2 p-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500" type="password"/>
+                    <i class="fas fa-eye absolute right-2 top-10 text-gray-500 cursor-pointer" id="togglePassword"></i>
+                </div>
+
+                <button id="loginButton" class="w-full bg-blue-500 text-white py-2 rounded-full mt-4 hover:bg-blue-600" type="button">
+                    Continue
+                </button>
+            </form>
+            <p style="text-align: center; color: #333; margin-top: 10px;">Already have an account?
+                <a href="login.html" class="text-cyan-500 font-semibold hover:underline">Login here</a>
+            </p>
+            <p class="text-gray-500 text-sm mt-4 text-center">
+                By clicking continue, you agree to the <br>
+                <a class="text-blue-500 cursor-pointer" id="openModal">Terms and Conditions</a>
+            </p>
+        </div>
+    </div>
+
+   <!-- Terms and Conditions Modal -->
+<div class="modal" id="termsModal">
+    <div class="modal-content">
+        <h2 class="text-2xl font-bold text-center">TERMS AND CONDITIONS</h2> <br>
+        <span class="close-btn" id="closeModal">&times;</span>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <p style="color: #2c4b74;"><strong>Acceptance of Terms</strong></p>
+                <ol class="list-decimal list-inside text-sm">
+                    <li>The EHR system is exclusively for authorized healthcare personnel involved in direct patient care and administrative duties.</li>
+                    <li>Employees must only access patient records relevant to their assigned tasks. Any unauthorized access or use is strictly prohibited.</li>
+                    <li>Each user is responsible for maintaining the confidentiality of their login credentials. Sharing passwords or allowing others to use your account is not permitted.</li>
+                    <li>Any attempt to gain unauthorized access, manipulate data, or bypass security controls is a serious violation that may result in disciplinary action.</li>
+                </ol>
+            </div>
+            <div>
+                <h2 style="color: #2c4b74;"><strong>CONFIDENTIALITY AND SECURITY</strong></h2>
+                <ol class="list-decimal list-inside text-sm">
+                    <li>Patient health information is confidential and protected by institutional policies and legal regulations. Employees must handle all data responsibly.</li>
+                    <li>Patient data must not be accessed, shared, or discussed with unauthorized individuals, including colleagues not directly involved in the patient's care.</li>
+                    <li>Employees must log out of the system when leaving their workstations and ensure that screens displaying patient information are not visible to unauthorized persons.</li>
+                    <li>Any suspected security breach or unauthorized access must be reported to the IT or Compliance Department immediately.</li>
+                </ol>
+            </div>
+            <div>
+                <h2 style="color: #2c4b74;"><strong>PROHIBITED ACTIVITIES</strong></h2>
+                <ol class="list-decimal list-inside text-sm">
+                    <li>Accessing patient records out of curiosity or personal interest is strictly prohibited.</li>
+                    <li>Using patient information for personal gain, external research, or any unauthorized purpose is not allowed.</li>
+                    <li>Employees must not install unauthorized software or attempt to alter system configurations without proper authorization.</li>
+                    <li>Sharing patient information through unauthorized communication channels (e.g., personal email, messaging apps) is a violation of policy.</li>
+                </ol>
+            </div>
+            <div>
+                <h2 style="color: #2c4b74;"><strong>ACCURACY AND DOCUMENTATION</strong></h2>
+                <ol class="list-decimal list-inside text-sm">
+                    <li>All entries in the EHR must be accurate, complete, and recorded in a timely manner.</li>
+                    <li>Falsification or manipulation of data is strictly prohibited. Corrections must follow established protocols.</li>
+                    <li>Employees must verify data entries before entering data to minimize errors that could impact patient care.</li>
+                    <li>Unauthorized changes, deletions, or corrections to patient records must be reported and are subject to investigation.</li>
+                </ol>
+            </div>
+            <div>
+                <h2 style="color: #2c4b74;"><strong>ACKNOWLEDGEMENT AND ACCEPTANCE</strong></h2>
+                <ol class="list-decimal list-inside text-sm">
+                    <li>By accessing the EHR system, employees acknowledge that they have read, understood, and agreed to comply with these terms and conditions.</li>
+                    <li>Employees are responsible for staying informed about changes while using the system and will be held accountable for the consequences of any violations.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Error Popup -->
+<div id="error-popup" class="hidden fixed top-10 right-10 bg-red-500 text-white py-2 px-4 rounded shadow-lg">
+    <p id="error-text"></p>
+</div>
+
+    <!-- JavaScript for Modal and Form Handling -->
+    <script src="db.js"></script>
+    <script>
+        const modal = document.getElementById("termsModal");
+        const openModal = document.getElementById("openModal");
+        const closeModal = document.getElementById("closeModal");
+    
+        openModal.onclick = () => {
+            modal.style.display = "flex";
+            document.body.style.overflow = "hidden"; // Prevents background scrolling
+        };
+    
+        closeModal.onclick = () => {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto"; // Restores scrolling
+        };
+    
+        // Close modal when clicking outside content
+        window.onclick = (e) => {
+            if (e.target === modal) {
+                modal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
+        };
+    
+        document.getElementById("loginButton").addEventListener("click", function () {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorPopup = document.getElementById("error-popup");
+            const errorText = document.getElementById("error-text");
+    
+            function showError(message) {
+                errorText.textContent = message;
+                errorPopup.classList.remove("hidden");
+                setTimeout(() => {
+                    errorPopup.classList.add("hidden");
+                }, 3000); // Hide after 3 seconds
+            }
+    
+            if (name === "" || email === "" || password === "") {
+                showError("Please fill in all fields before proceeding.");
+            } else if (password.length < 6) {
+                showError("Password must be at least 6 characters long.");
+            } else {
+                // Add user to the database
+                addUser(email, password, name, showError);
+            }
+        });
+
+        document.getElementById("togglePassword").addEventListener("click", function () {
+        const passwordField = document.getElementById("password");
+        const icon = this;
+        
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            passwordField.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    });
+    </script>
+
+</body>
+</html>

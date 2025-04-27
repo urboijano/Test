@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Everrest Hospital Dashboard</title>
+    <link rel="icon" type="image/png" href="[Logo] Blue (no bg).png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="db.js" defer></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap');
+        html, body {
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            height: 100%;
+        }
+        /* Custom hover effect for inactive buttons */
+        .inactive-hover:hover {
+            background-color: white;
+            color: #1E3A8A; /* Tailwind's blue-900 */
+        }
+    </style>
+</head>
+<body class="flex bg-gray-100">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-blue-900 text-white min-h-screen p-4 overflow-y-auto">
+        <div class="text-center mb-6">
+            <img src="logo.png" alt="Logo" class="mx-auto w-75">
+        </div>
+        <nav>
+            <ul class="space-y-2">
+                <li>
+                    <button id="dashboardBtn" class="w-full text-left bg-blue-900 text-white font-bold rounded-lg p-3 cursor-pointer inactive-hover">
+                        Dashboard
+                    </button>
+                </li>
+                <li>
+                    <button id="registrationBtn" class="w-full text-left bg-blue-900 text-white font-bold rounded-lg p-3 cursor-pointer inactive-hover">
+                        Registration
+                    </button>
+                </li>
+                <li>
+                    <button id="medicalBtn" class="w-full text-left font-bold hover:bg-white hover:text-blue-900 rounded-lg p-3 cursor-pointer">
+                        Medical History
+                    </button>
+                </li>
+                <li>
+                    <button id="healthBtn" class="w-full text-left font-bold hover:bg-white hover:text-blue-900 rounded-lg p-3 cursor-pointer">
+                        Health Assessment
+                    </button>
+                </li>
+                <li>
+                    <button id="vitalBtn" class="w-full text-left font-bold hover:bg-white hover:text-blue-900 rounded-lg p-3 cursor-pointer">
+                        Vital Signs
+                    </button>
+                </li>
+                <li>
+                    <button id="labBtn" class="w-full text-left font-bold hover:bg-white hover:text-blue-900 rounded-lg p-3 cursor-pointer">
+                        Laboratory
+                    </button>
+                </li>
+                <li>
+                    <button id="marBtn" class="w-full text-left font-bold hover:bg-white hover:text-blue-900 rounded-lg p-3 cursor-pointer">
+                        MAR
+                    </button>
+                </li>
+                <li>
+                    <button id="cdssBtn" class="w-full text-left font-bold hover:bg-white hover:text-blue-900 rounded-lg p-3 cursor-pointer">
+                        CDSS
+                    </button>
+                </li>
+                <li>
+                    <button id="followUpBtn" class="w-full text-left font-bold hover:bg-white hover:text-blue-900 rounded-lg p-3 cursor-pointer">
+                        Follow-up
+                    </button>
+                </li>
+                <li>
+                    <button id="consentFormBtn" class="w-full text-left font-bold hover:bg-white hover:text-blue-900 rounded-lg p-3 cursor-pointer">
+                        Consent Form
+                    </button>
+                </li>
+                <li>
+                    <button id="billingsBtn" class="w-full text-left font-bold hover:bg-white hover:text-blue-900 rounded-lg p-3 cursor-pointer">
+                        Billings
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col">
+        <!-- Top Navbar -->
+        <header class="bg-white shadow-md p-4 flex justify-between items-center">
+            <div class="flex space-x-6" id="navbarButtons">
+                <button id="homeBtn" type="button" class="text-lg font-semibold text-gray-700 focus:outline-none hover:text-blue-700 active-btn">Home</button>
+                <button id="patientIndexBtn" type="button" class="text-lg font-semibold text-gray-700 hover:text-blue-700 focus:outline-none">
+                    Patient Index
+                </button>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- Notification Bell -->
+                <div class="relative">
+                    <span class="cursor-pointer" id="notificationBell">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="text-blue-900" viewBox="0 0 24 24" width="24" height="24">
+                            <path fill="currentColor" d="M12 2C10.34 2 9 3.34 9 5V6.09C6.72 7.16 5.04 9.49 5 12V17L3 19V20H21V19L19 17V12C18.96 9.49 17.28 7.16 15 6.09V5C15 3.34 13.66 2 12 2zM12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22z"/>
+                        </svg>
+                    </span>
+                    <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-3 text-gray-700 z-50">
+                        <p class="text-sm font-semibold text-blue-900">Notifications</p>
+                        <hr class="my-2">
+                        <div id="notificationContent">
+                            <p class="text-sm" id="noNotifications">📢 No new notifications</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Dropdown -->
+                <div class="relative">
+                    <span class="cursor-pointer" id="profileIcon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="text-blue-900" viewBox="0 0 24 24" width="32" height="32">
+                            <path fill="currentColor" d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/>
+                        </svg>
+                    </span>
+                    <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-60 bg-white shadow-lg rounded-lg p-3 text-gray-700 z-50">
+                        <p id="userEmail" class="text-sm font-semibold text-blue-900">
+                            This function is not available yet.
+                        </p>
+                        <hr class="my-2">
+                        <ul>
+                            <li class="mb-2">
+                                <button id="contactBtn" class="w-full text-left bg-blue-500 text-white font-bold p-2 rounded hover:bg-blue-700">
+                                    Contact US
+                                </button>
+                            </li>
+                            <li>
+                                <button id="logoutBtn" class="w-full text-left bg-blue-500 text-white font-bold p-2 rounded hover:bg-red-600">
+                                    Logout
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Contact Us Modal -->
+                <div id="contactModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div class="bg-white rounded-lg shadow-lg w-[60rem] h-[80vh] p-8 relative flex">
+                        <!-- Left Section: Logo & Branding -->
+                        <div class="w-1/2 flex flex-col items-center justify-center rounded-lg p-6">
+                            <img src="[Logo] Grey (no bg).png" alt="Medical background image" class="object-contain w-full h-auto max-w-[500px] max-h-[500px]">
+                        </div>
+                        <!-- Right Section: Contact Details -->
+                        <div class="w-1/2 flex flex-col justify-center px-6 text-gray-700 text-lg space-y-4">
+                            <div class="text-center">
+                                <h3 class="text-5xl font-bold text-blue-900 tracking-wide">EVERREST</h3>
+                                <p class="text-lg text-blue-400 tracking-wide">MEDICAL HOSPITAL</p>
+                            </div>
+                            <p class="flex items-center space-x-2">
+                                <svg class="w-6 h-6 text-blue-900" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M22.46 6c-.77.35-1.6.58-2.46.69a4.27 4.27 0 0 0 1.88-2.37 8.59 8.59 0 0 1-2.72 1.04 4.26 4.26 0 0 0-7.26 3.88 12.1 12.1 0 0 1-8.77-4.45 4.26 4.26 0 0 0 1.32 5.68 4.22 4.22 0 0 1-1.93-.53v.05a4.26 4.26 0 0 0 3.42 4.18 4.27 4.27 0 0 1-1.92.07 4.26 4.26 0 0 0 3.98 2.96A8.54 8.54 0 0 1 2 19.54a12.07 12.07 0 0 0 6.56 1.92c7.88 0 12.2-6.53 12.2-12.2 0-.19 0-.37-.01-.56A8.7 8.7 0 0 0 22.46 6z"/></svg>
+                                <span>@everrestinpeacemedical</span>
+                            </p>
+                            <p class="flex items-center space-x-2">
+                                <svg class="w-6 h-6 text-blue-900" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M9.999 15.184l-.385 3.845c.553 0 .793-.237 1.082-.518l2.593-2.453 5.385 3.926c.984.543 1.682.258 1.926-.902l3.492-16.29h-.001c.316-1.482-.537-2.059-1.5-1.706L2.21 9.26c-1.453.568-1.435 1.385-.25 1.751l4.385 1.368 10.164-6.39c.48-.316.917-.141.557.175l-8.067 7.02z"/></svg>
+                                <span>0912-345-6789</span>
+                            </p>
+                            <p class="flex items-center space-x-2">
+                                <svg class="w-6 h-6 text-blue-900" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M22.675 0H1.325C.593 0 0 .593 0 1.326v21.348C0 23.407.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.894-4.788 4.659-4.788 1.325 0 2.464.099 2.795.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 1.763v2.31h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.324-.593 1.324-1.326V1.326C24 .593 23.407 0 22.675 0z"/></svg>
+                                <span>Everrest Medical Hospital</span>
+                            </p>
+                            <p class="flex items-center space-x-2">
+                                <svg class="w-6 h-6 text-blue-900" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2L2 7v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7l-10-5zm0 2.2L19.8 7H4.2L12 4.2zM4 9v8h16V9l-8 4-8-4z"/></svg>
+                                <span>everrest.com.ph</span>
+                            </p>
+                        </div>
+                        <span id="closeModalBtn" class="absolute top-4 right-4 cursor-pointer text-gray-700 hover:text-gray-900">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7a1 1 0 0 0-1.41 1.41L10.59 12l-4.89 4.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.41z"/>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+
+                <script>
+                    const contactBtn = document.getElementById('contactBtn');
+                    const contactModal = document.getElementById('contactModal');
+                    const closeModalBtn = document.getElementById('closeModalBtn');
+
+                    contactBtn.addEventListener('click', () => {
+                        contactModal.classList.remove('hidden');
+                    });
+
+                    closeModalBtn.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Prevent event from propagating to parent elements
+                        contactModal.classList.add('hidden');
+                    });
+
+                    // Optional: Close modal when clicking outside of it
+                    contactModal.addEventListener('click', (e) => {
+                        if (e.target === contactModal) {
+                            contactModal.classList.add('hidden');
+                        }
+                    });
+                </script>
+            </div>
+        </header>
+
+        <!-- Main Section -->
+        <main id="content" class="relative flex-1 flex items-center justify-center text-center min-h-screen">
+            <h2 class="text-5xl md:text-7xl font-bold text-black relative z-10">
+                Welcome to Everrest Hospital!
+            </h2>
+            <img src="2.png" class="absolute inset-0 w-full h-full object-cover opacity-50" alt="Hospital Background">
+        </main>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="patientModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-1/2">
+            <h2 class="text-2xl font-bold text-blue-900 mb-4">Select a Patient</h2>
+            <ul id="patients" class="space-y-2"></ul>
+            <button id="closeModal" class="mt-4 bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-700">Close</button>
+        </div>
+    </div>
+     <!-- Modal Structure for View Summary -->
+    <div id="summaryModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-1/2">
+            <h2 class="text-2xl font-bold text-blue-900 mb-4">Select a Patient</h2>
+            <ul id="summaryPatients" class="space-y-2"></ul>
+            <button id="closeSummaryModal" class="mt-4 bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-700">Close</button>
+            <div id="summaryModalContent"></div> <!-- Container for summary content -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
