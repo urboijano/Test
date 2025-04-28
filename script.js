@@ -1329,6 +1329,18 @@
                         </div>
                     </div>
         
+                    <!-- Nurse's Notes and Doctor Progress Notes -->
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        <div class="p-2">
+                            <label class="block text-sm font-semibold text-blue-900">Nurse's Notes:</label>
+                            <textarea id="nursesNotesInput" class="border border-blue-900 p-1 w-full rounded-md h-32"></textarea>
+                        </div>
+                        <div class="p-2">
+                            <label class="block text-sm font-semibold text-blue-900">Doctor Progress Notes:</label>
+                            <textarea id="doctorNotesInput" class="border border-blue-900 p-1 w-full rounded-md h-32"></textarea>
+                        </div>
+                    </div>
+        
                     <div class="flex flex-col items-end mt-4 space-y-2">
                         <button id="healthSubmitButton" class="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-700 hover:text-white font-bold">Submit Credentials</button>
                         <button id="healthSummaryButton" class="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-700 hover:text-white font-bold">View Patient History</button>
@@ -1399,6 +1411,7 @@
                         listItem.addEventListener("click", () => {
                             alert(`Credentials submitted to ${patient.name}`);
                             savePatientCredentials(patient);
+                            clearInputFields(); // Clear the input fields after saving
                             document.getElementById("patientListModal").classList.add("hidden");
                         });
                         patientListContainer.appendChild(listItem);
@@ -1504,6 +1517,8 @@
                     temperature: document.getElementById("temperatureInput").value,
                     capillaryRefills: document.getElementById("capillaryRefillsInput").value,
                     nails: document.getElementById("nailsInput").value,
+                    nursesNotes: document.getElementById("nursesNotesInput").value, // New field
+                    doctorNotes: document.getElementById("doctorNotesInput").value // New field
                 };
         
                 // Save data to local storage specific to the patient
@@ -1678,6 +1693,16 @@
                                     <tr><td class="p-1">Nails</td><td>${data.nails || 'N/A'}</td></tr>
                                 </table>
                             </div>
+        
+                            <!-- Nurse's Notes and Doctor Progress Notes -->
+                            <div class="mb-6">
+                                <h4 class="text-xl font-semibold text-blue-900 mb-2">Nurse's Notes</h4>
+                                <p>${data.nursesNotes || 'N/A'}</p>
+                            </div>
+                            <div class="mb-6">
+                                <h4 class="text-xl font-semibold text-blue-900 mb-2">Doctor Progress Notes</h4>
+                                <p>${data.doctorNotes || 'N/A'}</p>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -1695,6 +1720,8 @@
                 });
             }
         }
+        
+        
         
 
         function showVitalSigns() {
@@ -2077,67 +2104,67 @@
                                 <tbody class="text-blue-700">
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">White Blood Cell (WBC)</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter WBC count"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="wbc" class="border p-1 w-full rounded" placeholder="Enter WBC count"></td>
                                         <td class="border border-blue-700 px-4 py-2">6,000–17,000 mm³</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Red Blood Cell (RBC)</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter RBC count"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="rbc" class="border p-1 w-full rounded" placeholder="Enter RBC count"></td>
                                         <td class="border border-blue-700 px-4 py-2">3.90–5.30 million/mm³</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Hemoglobin (HGB)</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter HGB level"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="hgb" class="border p-1 w-full rounded" placeholder="Enter HGB level"></td>
                                         <td class="border border-blue-700 px-4 py-2">11.3–14.1 g/dL</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Hematocrit (HCT)</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter HCT level"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="hct" class="border p-1 w-full rounded" placeholder="Enter HCT level"></td>
                                         <td class="border border-blue-700 px-4 py-2">31% – 41%</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Mean Corpuscular Volume (MCV)</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter MCV level"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="mcv" class="border p-1 w-full rounded" placeholder="Enter MCV level"></td>
                                         <td class="border border-blue-700 px-4 py-2">70–86 fL</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Mean Corpuscular Hemoglobin (MCH)</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter MCH level"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="mch" class="border p-1 w-full rounded" placeholder="Enter MCH level"></td>
                                         <td class="border border-blue-700 px-4 py-2">23–31 pg</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Mean Corpuscular Hemoglobin Concentration (MCHC)</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter MCHC level"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="mchc" class="border p-1 w-full rounded" placeholder="Enter MCHC level"></td>
                                         <td class="border border-blue-700 px-4 py-2">32–36 g/dL RBC</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Platelet Count</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter platelet count"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="plateletCount" class="border p-1 w-full rounded" placeholder="Enter platelet count"></td>
                                         <td class="border border-blue-700 px-4 py-2">150,000–400,000 platelets/mm³</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Neutrophils</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter neutrophil count"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="neutrophils" class="border p-1 w-full rounded" placeholder="Enter neutrophil count"></td>
                                         <td class="border border-blue-700 px-4 py-2">1,000–8,500 mm³</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Lymphocytes</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter lymphocyte count"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="lymphocytes" class="border p-1 w-full rounded" placeholder="Enter lymphocyte count"></td>
                                         <td class="border border-blue-700 px-4 py-2">3,000–9,500 mm³</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Monocytes</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter monocyte count"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="monocytes" class="border p-1 w-full rounded" placeholder="Enter monocyte count"></td>
                                         <td class="border border-blue-700 px-4 py-2">300–850 mm³</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Eosinophils</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter eosinophil count"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="eosinophils" class="border p-1 w-full rounded" placeholder="Enter eosinophil count"></td>
                                         <td class="border border-blue-700 px-4 py-2">165–465 mm³</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Basophils</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter basophil count"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="basophils" class="border p-1 w-full rounded" placeholder="Enter basophil count"></td>
                                         <td class="border border-blue-700 px-4 py-2">0–140 mm³</td>
                                     </tr>
                                     <tr>
@@ -2173,47 +2200,47 @@
                                 <tbody class="text-blue-700">
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Specific Gravity</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter Specific Gravity"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="specificGravity" class="border p-1 w-full rounded" placeholder="Enter Specific Gravity"></td>
                                         <td class="border border-blue-700 px-4 py-2">1.001-1.020</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">pH</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter pH level"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="ph" class="border p-1 w-full rounded" placeholder="Enter pH level"></td>
                                         <td class="border border-blue-700 px-4 py-2">5 to 7</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Protein</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter Protein level"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="protein" class="border p-1 w-full rounded" placeholder="Enter Protein level"></td>
                                         <td class="border border-blue-700 px-4 py-2">Less than 10 mg/dL</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Glucose</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter Glucose level"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="glucose" class="border p-1 w-full rounded" placeholder="Enter Glucose level"></td>
                                         <td class="border border-blue-700 px-4 py-2">Negative</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Ketones</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter Ketones level"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="ketones" class="border p-1 w-full rounded" placeholder="Enter Ketones level"></td>
                                         <td class="border border-blue-700 px-4 py-2">Negative</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Bilirubin</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter Bilirubin level"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="bilirubin" class="border p-1 w-full rounded" placeholder="Enter Bilirubin level"></td>
                                         <td class="border border-blue-700 px-4 py-2">Negative</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Blood</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter Blood level"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="blood" class="border p-1 w-full rounded" placeholder="Enter Blood level"></td>
                                         <td class="border border-blue-700 px-4 py-2">Negative</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Leukocytes (White Blood Cells)</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter Leukocytes level"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="leukocytes" class="border p-1 w-full rounded" placeholder="Enter Leukocytes level"></td>
                                         <td class="border border-blue-700 px-4 py-2">Negative</td>
                                     </tr>
                                     <tr>
                                         <td class="border border-blue-700 px-4 py-2">Nitrates</td>
-                                        <td class="border border-blue-700 px-4 py-2"><input type="text" class="border p-1 w-full rounded" placeholder="Enter Nitrates level"></td>
+                                        <td class="border border-blue-700 px-4 py-2"><input type="text" id="nitrates" class="border p-1 w-full rounded" placeholder="Enter Nitrates level"></td>
                                         <td class="border border-blue-700 px-4 py-2">Negative</td>
                                     </tr>
                                     <tr>
@@ -2233,70 +2260,111 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="flex flex-col items-end mt-4 space-y-2">
+                            <button id="labSubmitButton" class="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-700 hover:text-white font-bold">Submit Credentials</button>
+                            <button id="labViewHistoryButton" class="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-700 hover:text-white font-bold">View Patient History</button>
+                        </div>
+                        <div class="h-20"></div> <!-- Added space at the bottom -->
                     </div>
-                    <div class="flex flex-col items-end mt-4 space-y-2">
-                        <button id="labSubmitButton" class="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-700 hover:text-white font-bold">Submit Credentials</button>
-                        <button id="labViewHistoryButton" class="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-700 hover:text-white font-bold">View Patient History</button>
-                    </div>
-                    <div class="h-20"></div> <!-- Added space at the bottom -->
-                </div>
         
-                <!-- Patient Selection Modal Structure -->
-                <div id="patientSelectionModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-                    <div class="bg-white rounded-lg shadow-lg w-80 max-h-[80vh] overflow-y-auto p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-2xl font-bold text-blue-900">Patient Lists</h3>
-                            <button id="closePatientSelectionModal" class="text-black text-2xl font-bold">&times;</button>
+                    <!-- Patient Selection Modal Structure -->
+                    <div id="patientSelectionModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+                        <div class="bg-white rounded-lg shadow-lg w-80 max-h-[80vh] overflow-y-auto p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-2xl font-bold text-blue-900">Patient Lists</h3>
+                                <button id="closePatientSelectionModal" class="text-black text-2xl font-bold">&times;</button>
+                            </div>
+                            <ul id="patientList" class="space-y-2"></ul>
                         </div>
-                        <ul id="patientList" class="space-y-2"></ul>
                     </div>
-                </div>
         
-                <!-- View Patient History Modal Structure -->
-                <div id="viewHistoryModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-                    <div class="bg-white rounded-lg shadow-lg w-80 max-h-[80vh] overflow-y-auto p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-2xl font-bold text-blue-900">View Patient History</h3>
-                            <button id="closeViewHistoryModal" class="text-black text-2xl font-bold">&times;</button>
+                    <!-- View Patient History Modal Structure -->
+                    <div id="viewHistoryModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+                        <div class="bg-white rounded-lg shadow-lg w-80 max-h-[80vh] overflow-y-auto p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-2xl font-bold text-blue-900">View Patient History</h3>
+                                <button id="closeViewHistoryModal" class="text-black text-2xl font-bold">&times;</button>
+                            </div>
+                            <ul id="historyPatientList" class="space-y-2"></ul>
                         </div>
-                        <ul id="historyPatientList" class="space-y-2"></ul>
                     </div>
-                </div>
         
-                <!-- Summary Modal Structure -->
-                <div id="summaryModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-                    <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[80vh] overflow-y-auto flex relative">
-                        <button id="closeSummaryModal" class="absolute top-2 right-2 text-black text-2xl font-bold">&times;</button>
-                        <!-- Patient List -->
-                        <div class="w-full p-4 border-r border-gray-300 overflow-y-auto">
-                            <h3 class="text-2xl font-bold text-blue-900 mb-4">Patients</h3>
-                            <ul id="summaryPatients"></ul>
-                        </div>
-                        <!-- Summary Content -->
-                        <div class="w-full p-4 overflow-y-auto hidden" id="summaryModalContent">
-                            <div id="summaryContent"></div>
+                    <!-- Summary Modal Structure -->
+                    <div id="summaryModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+                        <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[80vh] overflow-y-auto flex relative">
+                            <button id="closeSummaryModal" class="absolute top-2 right-2 text-black text-2xl font-bold">&times;</button>
+                            <!-- Patient List -->
+                            <div class="w-full p-4 border-r border-gray-300 overflow-y-auto">
+                                <h3 class="text-2xl font-bold text-blue-900 mb-4">Patients</h3>
+                                <ul id="summaryPatients"></ul>
+                            </div>
+                            <!-- Summary Content -->
+                            <div class="w-full p-4 overflow-y-auto hidden" id="summaryModalContent">
+                                <div id="summaryContent"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
         
-                <!-- Patient Modal Structure -->
-                <div id="patientModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-                    <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[80vh] overflow-y-auto flex relative">
-                        <button id="closeModal" class="absolute top-2 right-2 text-black text-2xl font-bold">&times;</button>
-                        <!-- Patient List -->
-                        <div class="w-full p-4 border-r border-gray-300 overflow-y-auto">
-                            <h3 class="text-2xl font-bold text-blue-900 mb-4">Patients</h3>
-                            <ul id="patients"></ul>
-                        </div>
-                        <!-- Submit Credentials Content -->
-                        <div class="w-full p-4 overflow-y-auto" id="submitContent">
-                            <!-- This will be populated with the patient's data -->
+                    <!-- Patient Modal Structure -->
+                    <div id="patientModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+                        <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[80vh] overflow-y-auto flex relative">
+                            <button id="closeModal" class="absolute top-2 right-2 text-black text-2xl font-bold">&times;</button>
+                            <!-- Patient List -->
+                            <div class="w-full p-4 border-r border-gray-300 overflow-y-auto">
+                                <h3 class="text-2xl font-bold text-blue-900 mb-4">Patients</h3>
+                                <ul id="patients"></ul>
+                            </div>
+                            <!-- Submit Credentials Content -->
+                            <div class="w-full p-4 overflow-y-auto" id="submitContent">
+                                <!-- This will be populated with the patient's data -->
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
         
             setActiveButtons(labBtn);
+        
+            // Function to check if the input values are within the reference range
+            function checkReferenceRanges(input) {
+                const ranges = {
+                    wbc: [6000, 17000],
+                    rbc: [3.90, 5.30],
+                    hgb: [11.3, 14.1],
+                    hct: [31, 41],
+                    mcv: [70, 86],
+                    mch: [23, 31],
+                    mchc: [32, 36],
+                    plateletCount: [150000, 400000],
+                    neutrophils: [1000, 8500],
+                    lymphocytes: [3000, 9500],
+                    monocytes: [300, 850],
+                    eosinophils: [165, 465],
+                    basophils: [0, 140],
+                    specificGravity: [1.001, 1.020],
+                    ph: [5, 7],
+                    protein: [0, 10],
+                    glucose: [0, 0],
+                    ketones: [0, 0],
+                    bilirubin: [0, 0],
+                    blood: [0, 0],
+                    leukocytes: [0, 0],
+                    nitrates: [0, 0],
+                };
+        
+                const value = parseFloat(input.value);
+                const [min, max] = ranges[input.id];
+                if (!isNaN(value) && (value < min || value > max)) {
+                    input.style.borderColor = 'red';
+                } else {
+                    input.style.borderColor = '';
+                }
+            }
+        
+            // Add event listeners for input fields to check reference ranges while typing
+            const inputFields = document.querySelectorAll('input[type="text"]');
+            inputFields.forEach(input => {
+                input.addEventListener('input', () => checkReferenceRanges(input));
+            });
         
             document.getElementById("labSubmitButton").addEventListener("click", function() {
                 const patients = JSON.parse(localStorage.getItem("patients")) || [];
@@ -2312,28 +2380,28 @@
                             // Save the form data to local storage
                             const formData = {
                                 assessmentDate: document.getElementById("assessment-date").value,
-                                wbc: document.querySelector('input[placeholder="Enter WBC count"]').value,
-                                rbc: document.querySelector('input[placeholder="Enter RBC count"]').value,
-                                hgb: document.querySelector('input[placeholder="Enter HGB level"]').value,
-                                hct: document.querySelector('input[placeholder="Enter HCT level"]').value,
-                                mcv: document.querySelector('input[placeholder="Enter MCV level"]').value,
-                                mch: document.querySelector('input[placeholder="Enter MCH level"]').value,
-                                mchc: document.querySelector('input[placeholder="Enter MCHC level"]').value,
-                                plateletCount: document.querySelector('input[placeholder="Enter platelet count"]').value,
-                                neutrophils: document.querySelector('input[placeholder="Enter neutrophil count"]').value,
-                                lymphocytes: document.querySelector('input[placeholder="Enter lymphocyte count"]').value,
-                                monocytes: document.querySelector('input[placeholder="Enter monocyte count"]').value,
-                                eosinophils: document.querySelector('input[placeholder="Enter eosinophil count"]').value,
-                                basophils: document.querySelector('input[placeholder="Enter basophil count"]').value,
-                                specificGravity: document.querySelector('input[placeholder="Enter Specific Gravity"]').value,
-                                ph: document.querySelector('input[placeholder="Enter pH level"]').value,
-                                protein: document.querySelector('input[placeholder="Enter Protein level"]').value,
-                                glucose: document.querySelector('input[placeholder="Enter Glucose level"]').value,
-                                ketones: document.querySelector('input[placeholder="Enter Ketones level"]').value,
-                                bilirubin: document.querySelector('input[placeholder="Enter Bilirubin level"]').value,
-                                blood: document.querySelector('input[placeholder="Enter Blood level"]').value,
-                                leukocytes: document.querySelector('input[placeholder="Enter Leukocytes level"]').value,
-                                nitrates: document.querySelector('input[placeholder="Enter Nitrates level"]').value,
+                                wbc: document.getElementById("wbc").value,
+                                rbc: document.getElementById("rbc").value,
+                                hgb: document.getElementById("hgb").value,
+                                hct: document.getElementById("hct").value,
+                                mcv: document.getElementById("mcv").value,
+                                mch: document.getElementById("mch").value,
+                                mchc: document.getElementById("mchc").value,
+                                plateletCount: document.getElementById("plateletCount").value,
+                                neutrophils: document.getElementById("neutrophils").value,
+                                lymphocytes: document.getElementById("lymphocytes").value,
+                                monocytes: document.getElementById("monocytes").value,
+                                eosinophils: document.getElementById("eosinophils").value,
+                                basophils: document.getElementById("basophils").value,
+                                specificGravity: document.getElementById("specificGravity").value,
+                                ph: document.getElementById("ph").value,
+                                protein: document.getElementById("protein").value,
+                                glucose: document.getElementById("glucose").value,
+                                ketones: document.getElementById("ketones").value,
+                                bilirubin: document.getElementById("bilirubin").value,
+                                blood: document.getElementById("blood").value,
+                                leukocytes: document.getElementById("leukocytes").value,
+                                nitrates: document.getElementById("nitrates").value,
                             };
         
                             // Convert photos to data URLs
@@ -2378,6 +2446,11 @@
         
                 // Show the view history modal
                 document.getElementById("viewHistoryModal").classList.remove("hidden");
+        
+                // Reset border colors after submitting
+                inputFields.forEach(input => {
+                    input.style.borderColor = '';
+                });
             });
         
             function saveFormData(patient, formData) {
@@ -2690,9 +2763,13 @@
                 const inputFields = document.querySelectorAll('input');
                 inputFields.forEach(field => {
                     field.value = '';
+                    field.style.borderColor = ''; // Reset border color
                 });
             }
         }
+        
+        
+        
         
         
         
@@ -2712,11 +2789,6 @@
            
         function showMAR() {
             const content = document.getElementById('content');
-            if (!content) {
-                console.error('Content element not found');
-                return;
-            }
-        
             content.innerHTML = `
                 <div class="p-4 bg-gray rounded-lg shadow-md h-[100vh] w-full overflow-y-auto">
                     <div>
@@ -2783,8 +2855,6 @@
                     </div>
                 </div>
             `;
-        
-            setActiveButtons(marBtn);
         
             function generateMedicationTableSection(title, rowCount) {
                 let rows = '';
@@ -3123,10 +3193,12 @@
                 });
             }
         
-            function setActiveButtons(button) {
-                console.log('setActiveButtons called with:', button);
-            }
+            // Ensure marBtn is defined
+            const marBtn = document.getElementById('marBtn');
+            console.log("marBtn:", marBtn); // Debugging line
+            setActiveButtons(marBtn);
         }
+        
         
         
         
@@ -3481,19 +3553,11 @@
                                     </div>
                                     <div>
                                         <label class="block text-blue-900 text-sm font-medium">Choose date</label>
-                                        <select id="appointmentDate" class="border border-blue-700 p-2 rounded w-full">
-                                            <option value="2024-07-13">2024-07-13</option>
-                                            <option value="2024-12-13">2024-12-13</option>
-                                            <option value="2025-03-16">2025-03-16</option>
-                                        </select>
+                                        <input type="date" id="appointmentDate" class="border border-blue-700 p-2 rounded w-full">
                                     </div>
                                     <div>
                                         <label class="block text-blue-900 text-sm font-medium">Choose time</label>
-                                        <select id="appointmentTime" class="border border-blue-700 p-2 rounded w-full">
-                                            <option value="16:00">16:00</option>
-                                            <option value="11:00">11:00</option>
-                                            <option value="17:00">17:00</option>
-                                        </select>
+                                        <input type="time" id="appointmentTime" class="border border-blue-700 p-2 rounded w-full">
                                     </div>
                                     <div>
                                         <label class="block text-blue-900 text-sm font-medium">Choose type</label>
@@ -3682,6 +3746,7 @@
                             }
                         }
                     }
+                    
                     
                     
                     
@@ -3923,351 +3988,357 @@
                         setActiveButtons(consentFormBtn);
                     }
                     
-                    function showBillings() {
-    content.innerHTML = `
-        <div class="p-4 bg-gray rounded-lg shadow-md h-[100vh] w-full overflow-y-auto">
-            <!-- Insurance Section -->
-            <div class="mb-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-2xl font-semibold text-blue-900">Insurance</h3>
-                    <div class="relative w-1/2">
-                        <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0z" />
-                        </svg>
-                        <input type="text" id="insuranceSearchInput" placeholder="Search..."
-                            class="p-3 pl-10 border border-blue-900 rounded-full w-full shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                </div>
-
-                <!-- Blue Line -->
-                <div class="h-1 bg-blue-900 mb-4"></div>
-                <!-- Insurance Table -->
-                <div class="w-full p-2 mt-2 relative overflow-x-auto">
-                    <table class="w-full border-collapse">
-                        <thead>
-                            <tr class="bg-gray-100 border-b border-blue-900">
-                                <th class="p-3 text-center">PRIORITY</th>
-                                <th class="p-3 text-center">PLAN NAME</th>
-                                <th class="p-3 text-center">PLAN NO.</th>
-                                <th class="p-3 text-center">EFFECTIVE DATE</th>
-                                <th class="p-3 text-center">EXPIRATION DATE</th>
-                                <th class="p-3 text-center">ACTIVE</th>
-                            </tr>
-                        </thead>
-                        <tbody id="insuranceTable">
-                            <!-- Insurance data will be dynamically added here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="h-80"></div> <!-- Added space at the bottom -->
-
-            <!-- Insurance Details Form -->
-            <div class="grid grid-cols-2 gap-4 mb-6">
-                <div class="flex flex-col">
-                    <label>INSURANCE PRIORITY</label>
-                    <select id="insurancePriority" class="border p-2 rounded">
-                        <option value="Primary">Primary</option>
-                        <option value="Secondary">Secondary</option>
-                        <option value="Tertiary">Tertiary</option>
-                    </select>
-                </div>
-                <div class="flex flex-col">
-                    <label>POLICY HOLDER</label>
-                    <select id="policyHolder" class="border p-2 rounded">
-                        <option value="Self">Self</option>
-                        <option value="Spouse">Spouse</option>
-                        <option value="Parent">Parent</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div class="flex flex-col">
-                    <label>PLAN TYPE</label>
-                    <select id="planType" class="border p-2 rounded">
-                        <option value="hmo">HMO</option>
-                        <option value="ppo">PPO</option>
-                        <option value="pos">POS</option>
-                    </select>
-                </div>
-                <div class="flex flex-col">
-                    <label>PLAN NAME</label>
-                    <select id="planName" class="border p-2 rounded">
-                        <option value="Basic">Basic</option>
-                        <option value="Standard">Standard</option>
-                        <option value="Premium">Premium</option>
-                    </select>
-                </div>
-                <div class="flex flex-col">
-                    <label>TYPE OF COVERAGE</label>
-                    <select id="coverageType" class="border p-2 rounded">
-                        <option value="Medical">Medical</option>
-                        <option value="Dental">Dental</option>
-                        <option value="Vision">Vision</option>
-                    </select>
-                </div>
-                <div class="flex flex-col">
-                    <label>GROUP NAME</label>
-                    <select id="groupName" class="border p-2 rounded">
-                        <option value="group_a">Group A</option>
-                        <option value="group_b">Group B</option>
-                        <option value="group_c">Group C</option>
-                    </select>
-                </div>
-                <div class="flex flex-col">
-                    <label>EFFECTIVE DATE</label>
-                    <input type="date" id="effectiveDate" class="border p-2 rounded">
-                </div>
-                <div class="flex flex-col">
-                    <label>EXPIRATION DATE</label>
-                    <input type="date" id="expirationDate" class="border p-2 rounded">
-                </div>
-                <div class="flex flex-col">
-                    <label>INSURANCE COMPANY</label>
-                    <select id="insuranceCompany" class="border p-2 rounded">
-                        <option value="company_a">Company A</option>
-                        <option value="company_b">Company B</option>
-                        <option value="company_c">Company C</option>
-                    </select>
-                </div>
-                <div class="flex flex-col">
-                    <label>GROUP NUMBER</label>
-                    <input type="text" id="groupNumber" class="border p-2 rounded" readonly>
-                </div>
-            </div>
-
-            <!-- Confirm Button -->
-            <div class="flex justify-center gap-5 mt-4">
-                <button id="confirmInsuranceBtn" class="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-700 hover:text-white font-bold">
-                    Confirm Insurance
-                </button>
-            </div>
-            <div class="h-10"></div>
-
-            <!-- Insurance Card Section -->
-            <div class="bg-blue-900 text-white p-4 rounded-lg flex items-center justify-between mb-6">
-                <div>
-                    <h3 class="text-lg font-semibold">INSURANCE CARDS</h3>
-                    <p>SCAN THE FOLLOWING QR CODE TO ACCESS DATA:</p>
-                </div>
-                <img src="qr.png" alt="QR Code" class="w-16 h-16">
-            </div>
-            <div class="h-20"></div> <!-- Added space at the bottom -->
-
-            <!-- Payment History Section -->
-            <div class="mb-6">
-                <!-- Grid Layout for Inputs -->
-                <div class="grid grid-cols-3 gap-4 mt-4">
-                    <div class="flex flex-col">
-                        <label class="block text-blue-900 text-sm font-medium">Date of Payment</label>
-                        <input type="date" id="paymentDate" class="border p-2 rounded">
-                    </div>
-                    <div class="flex flex-col">
-                        <label class="block text-blue-900 text-sm font-medium">Time of Payment</label>
-                        <input type="time" id="paymentTime" class="border p-2 rounded">
-                    </div>
-                    <div class="flex flex-col relative">
-                        <label class="block text-gray-100 text-sm font-medium">System Created by: Adrian Aquino</label>
-                        <div class="relative w-full">
-                            <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-900"
-                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M21 21l-4.35-4.35m1.85-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0z" />
-                            </svg>
-                            <input type="text" id="paymentSearchInput" placeholder="Search payments..."
-                                   class="p-3 pl-12 border border-blue-900 rounded-full w-full shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </div>
-                    </div>
-                    <div class="flex flex-col">
-                        <label class="block text-blue-900 text-sm font-medium">Bank</label>
-                        <input type="text" id="paymentBank" class="border p-2 rounded">
-                    </div>
-                    <div class="flex flex-col">
-                        <label class="block text-blue-900 text-sm font-medium">Proof of Payment</label>
-                        <input type="file" accept="image/*" id="proofOfPaymentInput" class="border p-2 rounded">
-                    </div>
-                </div>
-
-                <!-- Buttons Below Inputs -->
-                <div class="flex justify-center gap-4 mt-4">
-                    <button id="confirmPaymentBtn" class="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-700 hover:text-white font-bold">Confirm Payment</button>
-                </div>
-
-                <!-- Blue Line -->
-                <div class="h-1 bg-blue-900 my-4"></div>
-
-                <!-- Payments Table -->
-                <div class="w-full p-2 mt-2 relative overflow-x-auto">
-                    <table class="w-full border-collapse">
-                        <thead>
-                            <tr class="bg-gray-100 border-b border-blue-900">
-                                <th class="p-3 text-center">DATE/TIME</th>
-                                <th class="p-3 text-center">BANK</th>
-                                <th class="p-3 text-center">STATUS</th>
-                                <th class="p-3 text-center">OR NO.</th>
-                            </tr>
-                        </thead>
-                        <tbody id="paymentTable">
-                            <!-- Payment history will be dynamically added here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="h-20"></div> <!-- Added space at the bottom -->
-        </div>
-    `;
-
-    const confirmInsuranceBtn = document.getElementById("confirmInsuranceBtn");
-    const confirmPaymentBtn = document.getElementById("confirmPaymentBtn");
-    const insuranceTable = document.getElementById("insuranceTable");
-    const paymentTable = document.getElementById("paymentTable");
-    const insuranceSearchInput = document.getElementById("insuranceSearchInput");
-    const paymentSearchInput = document.getElementById("paymentSearchInput");
-    const groupNumberInput = document.getElementById("groupNumber");
-
-    // Generate a random group number and display it
-    const randomGroupNumber = Math.floor(100000 + Math.random() * 900000);
-    groupNumberInput.value = randomGroupNumber;
-
-    // Load insurance data from local storage
-    let insuranceData = JSON.parse(localStorage.getItem("insuranceData")) || [];
-    insuranceData.forEach(insurance => {
-        const row = document.createElement("tr");
-        row.classList.add("border-b", "border-blue-900");
-        row.innerHTML = `
-            <td class="p-3 text-center">${insurance.priority}</td>
-            <td class="p-3 text-center">${insurance.planName}</td>
-            <td class="p-3 text-center">${insurance.groupNumber}</td>
-            <td class="p-3 text-center">${insurance.effectiveDate}</td>
-            <td class="p-3 text-center">${insurance.expirationDate}</td>
-            <td class="p-3 text-center">${insurance.active}</td>
-        `;
-        insuranceTable.appendChild(row);
-    });
-
-    // Add event listener to confirm insurance button
-    confirmInsuranceBtn.addEventListener("click", () => {
-        const insurance = {
-            priority: document.getElementById("insurancePriority").value,
-            policyHolder: document.getElementById("policyHolder").value,
-            planType: document.getElementById("planType").value,
-            planName: document.getElementById("planName").value,
-            coverageType: document.getElementById("coverageType").value,
-            groupName: document.getElementById("groupName").value,
-            effectiveDate: document.getElementById("effectiveDate").value,
-            expirationDate: document.getElementById("expirationDate").value,
-            insuranceCompany: document.getElementById("insuranceCompany").value,
-            groupNumber: groupNumberInput.value,
-            active: "NO"
-        };
-
-        const row = document.createElement("tr");
-        row.classList.add("border-b", "border-blue-900");
-        row.innerHTML = `
-            <td class="p-3 text-center">${insurance.priority}</td>
-            <td class="p-3 text-center">${insurance.planName}</td>
-            <td class="p-3 text-center">${insurance.groupNumber}</td>
-            <td class="p-3 text-center">${insurance.effectiveDate}</td>
-            <td class="p-3 text-center">${insurance.expirationDate}</td>
-            <td class="p-3 text-center">${insurance.active}</td>
-        `;
-        insuranceTable.appendChild(row);
-
-        // Store insurance data in local storage
-        insuranceData.push(insurance);
-        localStorage.setItem("insuranceData", JSON.stringify(insuranceData));
-
-        // Clear the form inputs
-        document.getElementById("insurancePriority").value = "Primary";
-        document.getElementById("policyHolder").value = "Self";
-        document.getElementById("planType").value = "hmo";
-        document.getElementById("planName").value = "Basic";
-        document.getElementById("coverageType").value = "Medical";
-        document.getElementById("groupName").value = "group_a";
-        document.getElementById("effectiveDate").value = "";
-        document.getElementById("expirationDate").value = "";
-        document.getElementById("insuranceCompany").value = "company_a";
-        groupNumberInput.value = Math.floor(100000 + Math.random() * 900000);
-    });
-
-    // Add event listener to confirm payment button
-    confirmPaymentBtn.addEventListener("click", () => {
-        const paymentDate = document.getElementById("paymentDate").value;
-        const paymentTime = document.getElementById("paymentTime").value;
-        const paymentBank = document.getElementById("paymentBank").value;
-
-        // Generate a random OR No.
-        const paymentOR = `OR-${Math.floor(100000 + Math.random() * 900000)}`;
-
-        if (paymentDate && paymentTime && paymentBank) {
-            const newRow = document.createElement("tr");
-            newRow.classList.add("text-center", "border-b-2", "border-blue-900");
-
-            newRow.innerHTML = `
-                <td class="p-2">${paymentDate} ${paymentTime}</td>
-                <td class="p-2">${paymentBank}</td>
-                <td class="p-2">POSTED</td>
-                <td class="p-2 text-blue-900 font-semibold">${paymentOR}</td>
-            `;
-
-            paymentTable.appendChild(newRow);
-
-            // Clear the form inputs
-            document.getElementById("paymentDate").value = "";
-            document.getElementById("paymentTime").value = "";
-            document.getElementById("paymentBank").value = "";
-            document.getElementById("proofOfPaymentInput").value = "";
-
-            // Update insurance data in local storage
-            insuranceData.forEach(insurance => {
-                insurance.active = "YES";
-            });
-            localStorage.setItem("insuranceData", JSON.stringify(insuranceData));
-
-            // Update the insurance table
-            const rows = insuranceTable.querySelectorAll("tr");
-            rows.forEach(row => {
-                const activeCell = row.querySelectorAll("td")[5]; // Active status is in the 6th column
-                if (activeCell) {
-                    activeCell.textContent = "YES";
-                }
-            });
-        } else {
-            alert("Please fill in all fields before confirming payment.");
-        }
-    });
-
-    // Search functionality for insurance table
-    insuranceSearchInput.addEventListener("input", function () {
-        const searchValue = insuranceSearchInput.value.toLowerCase();
-        const rows = insuranceTable.querySelectorAll("tr");
-        rows.forEach(row => {
-            const cells = row.querySelectorAll("td");
-            const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(searchValue));
-            row.style.display = match ? "" : "none";
-        });
-    });
-
-    // Search functionality for payment table
-    paymentSearchInput.addEventListener("input", function () {
-        const searchValue = paymentSearchInput.value.toLowerCase();
-        const rows = paymentTable.querySelectorAll("tr");
-
-        rows.forEach(row => {
-            const orCell = row.querySelectorAll("td")[3]; // OR number is in the 4th column
-            if (orCell) {
-                const orText = orCell.textContent.toLowerCase();
-                row.style.display = orText.includes(searchValue) ? "" : "none";
-            }
-        });
-    });
-}
-
+                    
                     
                     
                     
                            
-                             
+                    function showBillings() {
+                        content.innerHTML = `
+                            <div class="p-4 bg-gray rounded-lg shadow-md h-[100vh] w-full overflow-y-auto">
+                                <!-- Insurance Section -->
+                                <div class="mb-6">
+                                    <div class="flex justify-between items-center mb-4">
+                                        <h3 class="text-2xl font-semibold text-blue-900">Insurance</h3>
+                                        <div class="relative w-1/2">
+                                            <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0z" />
+                                            </svg>
+                                            <input type="text" id="insuranceSearchInput" placeholder="Search..."
+                                                class="p-3 pl-10 border border-blue-900 rounded-full w-full shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                        </div>
+                                    </div>
+                    
+                                    <!-- Blue Line -->
+                                    <div class="h-1 bg-blue-900 mb-4"></div>
+                                    <!-- Insurance Table -->
+                                    <div class="w-full p-2 mt-2 relative overflow-x-auto">
+                                        <table class="w-full border-collapse">
+                                            <thead>
+                                                <tr class="bg-gray-100 border-b border-blue-900">
+                                                    <th class="p-3 text-center">PRIORITY</th>
+                                                    <th class="p-3 text-center">PLAN NAME</th>
+                                                    <th class="p-3 text-center">PLAN NO.</th>
+                                                    <th class="p-3 text-center">EFFECTIVE DATE</th>
+                                                    <th class="p-3 text-center">EXPIRATION DATE</th>
+                                                    <th class="p-3 text-center">ACTIVE</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="insuranceTable">
+                                                <!-- Insurance data will be dynamically added here -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                    
+                                <div class="h-80"></div> <!-- Added space at the bottom -->
+                    
+                                <!-- Insurance Details Form -->
+                                <div class="grid grid-cols-2 gap-4 mb-6">
+                                    <div class="flex flex-col">
+                                        <label>INSURANCE PRIORITY</label>
+                                        <select id="insurancePriority" class="border p-2 rounded">
+                                            <option value="Primary">Primary</option>
+                                            <option value="Secondary">Secondary</option>
+                                            <option value="Tertiary">Tertiary</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label>POLICY HOLDER</label>
+                                        <select id="policyHolder" class="border p-2 rounded">
+                                            <option value="Self">Self</option>
+                                            <option value="Spouse">Spouse</option>
+                                            <option value="Parent">Parent</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label>PLAN TYPE</label>
+                                        <select id="planType" class="border p-2 rounded">
+                                            <option value="hmo">HMO</option>
+                                            <option value="ppo">PPO</option>
+                                            <option value="pos">POS</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label>PLAN NAME</label>
+                                        <select id="planName" class="border p-2 rounded">
+                                            <option value="Basic">Basic</option>
+                                            <option value="Standard">Standard</option>
+                                            <option value="Premium">Premium</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label>TYPE OF COVERAGE</label>
+                                        <select id="coverageType" class="border p-2 rounded">
+                                            <option value="Medical">Medical</option>
+                                            <option value="Dental">Dental</option>
+                                            <option value="Vision">Vision</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label>GROUP NAME</label>
+                                        <select id="groupName" class="border p-2 rounded">
+                                            <option value="group_a">Group A</option>
+                                            <option value="group_b">Group B</option>
+                                            <option value="group_c">Group C</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label>EFFECTIVE DATE</label>
+                                        <input type="date" id="effectiveDate" class="border p-2 rounded">
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label>EXPIRATION DATE</label>
+                                        <input type="date" id="expirationDate" class="border p-2 rounded">
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label>INSURANCE COMPANY</label>
+                                        <select id="insuranceCompany" class="border p-2 rounded">
+                                            <option value="company_a">Company A</option>
+                                            <option value="company_b">Company B</option>
+                                            <option value="company_c">Company C</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label>GROUP NUMBER</label>
+                                        <input type="text" id="groupNumber" class="border p-2 rounded" readonly>
+                                    </div>
+                                </div>
+                    
+                                <!-- Confirm Button -->
+                                <div class="flex justify-center gap-5 mt-4">
+                                    <button id="confirmInsuranceBtn" class="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-700 hover:text-white font-bold">
+                                        Confirm Insurance
+                                    </button>
+                                </div>
+                                <div class="h-10"></div>
+                    
+                                <!-- Insurance Card Section -->
+                                <div class="bg-blue-900 text-white p-4 rounded-lg flex items-center justify-between mb-6">
+                                    <div>
+                                        <h3 class="text-lg font-semibold">INSURANCE CARDS</h3>
+                                        <p>SCAN THE FOLLOWING QR CODE TO ACCESS DATA:</p>
+                                    </div>
+                                    <img src="qr.png" alt="QR Code" class="w-16 h-16">
+                                </div>
+                                <div class="h-20"></div> <!-- Added space at the bottom -->
+                    
+                                <!-- Payment History Section -->
+                                <div class="mb-6">
+                                    <!-- Grid Layout for Inputs -->
+                                    <div class="grid grid-cols-3 gap-4 mt-4">
+                                        <div class="flex flex-col">
+                                            <label class="block text-blue-900 text-sm font-medium">Date of Payment</label>
+                                            <input type="date" id="paymentDate" class="border p-2 rounded">
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label class="block text-blue-900 text-sm font-medium">Time of Payment</label>
+                                            <input type="time" id="paymentTime" class="border p-2 rounded">
+                                        </div>
+                                        <div class="flex flex-col relative">
+                                            <label class="block text-gray-100 text-sm font-medium">System Created by: Adrian Aquino</label>
+                                            <div class="relative w-full">
+                                                <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-900"
+                                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                          d="M21 21l-4.35-4.35m1.85-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0z" />
+                                                </svg>
+                                                <input type="text" id="paymentSearchInput" placeholder="Search payments..."
+                                                       class="p-3 pl-12 border border-blue-900 rounded-full w-full shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label class="block text-blue-900 text-sm font-medium">Bank</label>
+                                            <input type="text" id="paymentBank" class="border p-2 rounded">
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label class="block text-blue-900 text-sm font-medium">Proof of Payment</label>
+                                            <input type="file" accept="image/*" id="proofOfPaymentInput" class="border p-2 rounded">
+                                        </div>
+                                    </div>
+                    
+                                    <!-- Buttons Below Inputs -->
+                                    <div class="flex justify-center gap-4 mt-4">
+                                        <button id="confirmPaymentBtn" class="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-700 hover:text-white font-bold">Confirm Payment</button>
+                                    </div>
+                    
+                                    <!-- Blue Line -->
+                                    <div class="h-1 bg-blue-900 my-4"></div>
+                    
+                                    <!-- Payments Table -->
+                                    <div class="w-full p-2 mt-2 relative overflow-x-auto">
+                                        <table class="w-full border-collapse">
+                                            <thead>
+                                                <tr class="bg-gray-100 border-b border-blue-900">
+                                                    <th class="p-3 text-center">DATE/TIME</th>
+                                                    <th class="p-3 text-center">BANK</th>
+                                                    <th class="p-3 text-center">STATUS</th>
+                                                    <th class="p-3 text-center">OR NO.</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="paymentTable">
+                                                <!-- Payment history will be dynamically added here -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="h-20"></div> <!-- Added space at the bottom -->
+                            </div>
+                        `;
+                    
+                        const confirmInsuranceBtn = document.getElementById("confirmInsuranceBtn");
+                        const confirmPaymentBtn = document.getElementById("confirmPaymentBtn");
+                        const insuranceTable = document.getElementById("insuranceTable");
+                        const paymentTable = document.getElementById("paymentTable");
+                        const insuranceSearchInput = document.getElementById("insuranceSearchInput");
+                        const paymentSearchInput = document.getElementById("paymentSearchInput");
+                        const groupNumberInput = document.getElementById("groupNumber");
+                    
+                        // Generate a random group number and display it
+                        const randomGroupNumber = Math.floor(100000 + Math.random() * 900000);
+                        groupNumberInput.value = randomGroupNumber;
+                    
+                        // Load insurance data from local storage
+                        let insuranceData = JSON.parse(localStorage.getItem("insuranceData")) || [];
+                        insuranceData.forEach(insurance => {
+                            const row = document.createElement("tr");
+                            row.classList.add("border-b", "border-blue-900");
+                            row.innerHTML = `
+                                <td class="p-3 text-center">${insurance.priority}</td>
+                                <td class="p-3 text-center">${insurance.planName}</td>
+                                <td class="p-3 text-center">${insurance.groupNumber}</td>
+                                <td class="p-3 text-center">${insurance.effectiveDate}</td>
+                                <td class="p-3 text-center">${insurance.expirationDate}</td>
+                                <td class="p-3 text-center">${insurance.active}</td>
+                            `;
+                            insuranceTable.appendChild(row);
+                        });
+                    
+                        // Add event listener to confirm insurance button
+                        confirmInsuranceBtn.addEventListener("click", () => {
+                            const insurance = {
+                                priority: document.getElementById("insurancePriority").value,
+                                policyHolder: document.getElementById("policyHolder").value,
+                                planType: document.getElementById("planType").value,
+                                planName: document.getElementById("planName").value,
+                                coverageType: document.getElementById("coverageType").value,
+                                groupName: document.getElementById("groupName").value,
+                                effectiveDate: document.getElementById("effectiveDate").value,
+                                expirationDate: document.getElementById("expirationDate").value,
+                                insuranceCompany: document.getElementById("insuranceCompany").value,
+                                groupNumber: groupNumberInput.value,
+                                active: "NO"
+                            };
+                    
+                            const row = document.createElement("tr");
+                            row.classList.add("border-b", "border-blue-900");
+                            row.innerHTML = `
+                                <td class="p-3 text-center">${insurance.priority}</td>
+                                <td class="p-3 text-center">${insurance.planName}</td>
+                                <td class="p-3 text-center">${insurance.groupNumber}</td>
+                                <td class="p-3 text-center">${insurance.effectiveDate}</td>
+                                <td class="p-3 text-center">${insurance.expirationDate}</td>
+                                <td class="p-3 text-center">${insurance.active}</td>
+                            `;
+                            insuranceTable.appendChild(row);
+                    
+                            // Store insurance data in local storage
+                            insuranceData.push(insurance);
+                            localStorage.setItem("insuranceData", JSON.stringify(insuranceData));
+                    
+                            // Clear the form inputs
+                            document.getElementById("insurancePriority").value = "Primary";
+                            document.getElementById("policyHolder").value = "Self";
+                            document.getElementById("planType").value = "hmo";
+                            document.getElementById("planName").value = "Basic";
+                            document.getElementById("coverageType").value = "Medical";
+                            document.getElementById("groupName").value = "group_a";
+                            document.getElementById("effectiveDate").value = "";
+                            document.getElementById("expirationDate").value = "";
+                            document.getElementById("insuranceCompany").value = "company_a";
+                            groupNumberInput.value = Math.floor(100000 + Math.random() * 900000);
+                        });
+                    
+                        // Add event listener to confirm payment button
+                        confirmPaymentBtn.addEventListener("click", () => {
+                            const paymentDate = document.getElementById("paymentDate").value;
+                            const paymentTime = document.getElementById("paymentTime").value;
+                            const paymentBank = document.getElementById("paymentBank").value;
+                    
+                            // Generate a random OR No.
+                            const paymentOR = `OR-${Math.floor(100000 + Math.random() * 900000)}`;
+                    
+                            if (paymentDate && paymentTime && paymentBank) {
+                                const newRow = document.createElement("tr");
+                                newRow.classList.add("text-center", "border-b-2", "border-blue-900");
+                    
+                                newRow.innerHTML = `
+                                    <td class="p-2">${paymentDate} ${paymentTime}</td>
+                                    <td class="p-2">${paymentBank}</td>
+                                    <td class="p-2">POSTED</td>
+                                    <td class="p-2 text-blue-900 font-semibold">${paymentOR}</td>
+                                `;
+                    
+                                paymentTable.appendChild(newRow);
+                    
+                                // Clear the form inputs
+                                document.getElementById("paymentDate").value = "";
+                                document.getElementById("paymentTime").value = "";
+                                document.getElementById("paymentBank").value = "";
+                                document.getElementById("proofOfPaymentInput").value = "";
+                    
+                                // Update insurance data in local storage
+                                insuranceData.forEach(insurance => {
+                                    insurance.active = "YES";
+                                });
+                                localStorage.setItem("insuranceData", JSON.stringify(insuranceData));
+                    
+                                // Update the insurance table
+                                const rows = insuranceTable.querySelectorAll("tr");
+                                rows.forEach(row => {
+                                    const activeCell = row.querySelectorAll("td")[5]; // Active status is in the 6th column
+                                    if (activeCell) {
+                                        activeCell.textContent = "YES";
+                                    }
+                                });
+                            } else {
+                                alert("Please fill in all fields before confirming payment.");
+                            }
+                        });
+                    
+                        // Search functionality for insurance table
+                        insuranceSearchInput.addEventListener("input", function () {
+                            const searchValue = insuranceSearchInput.value.toLowerCase();
+                            const rows = insuranceTable.querySelectorAll("tr");
+                            rows.forEach(row => {
+                                const cells = row.querySelectorAll("td");
+                                const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(searchValue));
+                                row.style.display = match ? "" : "none";
+                            });
+                        });
+                    
+                        // Search functionality for payment table
+                        paymentSearchInput.addEventListener("input", function () {
+                            const searchValue = paymentSearchInput.value.toLowerCase();
+                            const rows = paymentTable.querySelectorAll("tr");
+                    
+                            rows.forEach(row => {
+                                const orCell = row.querySelectorAll("td")[3]; // OR number is in the 4th column
+                                if (orCell) {
+                                    const orText = orCell.textContent.toLowerCase();
+                                    row.style.display = orText.includes(searchValue) ? "" : "none";
+                                }
+                            });
+                        });
+                        setActiveButtons(billingsBtn);
+                    }
+                    
+                    
+                    
+                    
+                    
+                    
         
         
 
