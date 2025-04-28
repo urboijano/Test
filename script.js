@@ -3923,7 +3923,346 @@
                         setActiveButtons(consentFormBtn);
                     }
                     
-                    
+                    function showBillings() {
+    content.innerHTML = `
+        <div class="p-4 bg-gray rounded-lg shadow-md h-[100vh] w-full overflow-y-auto">
+            <!-- Insurance Section -->
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-2xl font-semibold text-blue-900">Insurance</h3>
+                    <div class="relative w-1/2">
+                        <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0z" />
+                        </svg>
+                        <input type="text" id="insuranceSearchInput" placeholder="Search..."
+                            class="p-3 pl-10 border border-blue-900 rounded-full w-full shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+
+                <!-- Blue Line -->
+                <div class="h-1 bg-blue-900 mb-4"></div>
+                <!-- Insurance Table -->
+                <div class="w-full p-2 mt-2 relative overflow-x-auto">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100 border-b border-blue-900">
+                                <th class="p-3 text-center">PRIORITY</th>
+                                <th class="p-3 text-center">PLAN NAME</th>
+                                <th class="p-3 text-center">PLAN NO.</th>
+                                <th class="p-3 text-center">EFFECTIVE DATE</th>
+                                <th class="p-3 text-center">EXPIRATION DATE</th>
+                                <th class="p-3 text-center">ACTIVE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="insuranceTable">
+                            <!-- Insurance data will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="h-80"></div> <!-- Added space at the bottom -->
+
+            <!-- Insurance Details Form -->
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div class="flex flex-col">
+                    <label>INSURANCE PRIORITY</label>
+                    <select id="insurancePriority" class="border p-2 rounded">
+                        <option value="Primary">Primary</option>
+                        <option value="Secondary">Secondary</option>
+                        <option value="Tertiary">Tertiary</option>
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <label>POLICY HOLDER</label>
+                    <select id="policyHolder" class="border p-2 rounded">
+                        <option value="Self">Self</option>
+                        <option value="Spouse">Spouse</option>
+                        <option value="Parent">Parent</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <label>PLAN TYPE</label>
+                    <select id="planType" class="border p-2 rounded">
+                        <option value="hmo">HMO</option>
+                        <option value="ppo">PPO</option>
+                        <option value="pos">POS</option>
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <label>PLAN NAME</label>
+                    <select id="planName" class="border p-2 rounded">
+                        <option value="Basic">Basic</option>
+                        <option value="Standard">Standard</option>
+                        <option value="Premium">Premium</option>
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <label>TYPE OF COVERAGE</label>
+                    <select id="coverageType" class="border p-2 rounded">
+                        <option value="Medical">Medical</option>
+                        <option value="Dental">Dental</option>
+                        <option value="Vision">Vision</option>
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <label>GROUP NAME</label>
+                    <select id="groupName" class="border p-2 rounded">
+                        <option value="group_a">Group A</option>
+                        <option value="group_b">Group B</option>
+                        <option value="group_c">Group C</option>
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <label>EFFECTIVE DATE</label>
+                    <input type="date" id="effectiveDate" class="border p-2 rounded">
+                </div>
+                <div class="flex flex-col">
+                    <label>EXPIRATION DATE</label>
+                    <input type="date" id="expirationDate" class="border p-2 rounded">
+                </div>
+                <div class="flex flex-col">
+                    <label>INSURANCE COMPANY</label>
+                    <select id="insuranceCompany" class="border p-2 rounded">
+                        <option value="company_a">Company A</option>
+                        <option value="company_b">Company B</option>
+                        <option value="company_c">Company C</option>
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <label>GROUP NUMBER</label>
+                    <input type="text" id="groupNumber" class="border p-2 rounded" readonly>
+                </div>
+            </div>
+
+            <!-- Confirm Button -->
+            <div class="flex justify-center gap-5 mt-4">
+                <button id="confirmInsuranceBtn" class="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-700 hover:text-white font-bold">
+                    Confirm Insurance
+                </button>
+            </div>
+            <div class="h-10"></div>
+
+            <!-- Insurance Card Section -->
+            <div class="bg-blue-900 text-white p-4 rounded-lg flex items-center justify-between mb-6">
+                <div>
+                    <h3 class="text-lg font-semibold">INSURANCE CARDS</h3>
+                    <p>SCAN THE FOLLOWING QR CODE TO ACCESS DATA:</p>
+                </div>
+                <img src="qr.png" alt="QR Code" class="w-16 h-16">
+            </div>
+            <div class="h-20"></div> <!-- Added space at the bottom -->
+
+            <!-- Payment History Section -->
+            <div class="mb-6">
+                <!-- Grid Layout for Inputs -->
+                <div class="grid grid-cols-3 gap-4 mt-4">
+                    <div class="flex flex-col">
+                        <label class="block text-blue-900 text-sm font-medium">Date of Payment</label>
+                        <input type="date" id="paymentDate" class="border p-2 rounded">
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="block text-blue-900 text-sm font-medium">Time of Payment</label>
+                        <input type="time" id="paymentTime" class="border p-2 rounded">
+                    </div>
+                    <div class="flex flex-col relative">
+                        <label class="block text-gray-100 text-sm font-medium">System Created by: Adrian Aquino</label>
+                        <div class="relative w-full">
+                            <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-900"
+                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M21 21l-4.35-4.35m1.85-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0z" />
+                            </svg>
+                            <input type="text" id="paymentSearchInput" placeholder="Search payments..."
+                                   class="p-3 pl-12 border border-blue-900 rounded-full w-full shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="block text-blue-900 text-sm font-medium">Bank</label>
+                        <input type="text" id="paymentBank" class="border p-2 rounded">
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="block text-blue-900 text-sm font-medium">Proof of Payment</label>
+                        <input type="file" accept="image/*" id="proofOfPaymentInput" class="border p-2 rounded">
+                    </div>
+                </div>
+
+                <!-- Buttons Below Inputs -->
+                <div class="flex justify-center gap-4 mt-4">
+                    <button id="confirmPaymentBtn" class="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-700 hover:text-white font-bold">Confirm Payment</button>
+                </div>
+
+                <!-- Blue Line -->
+                <div class="h-1 bg-blue-900 my-4"></div>
+
+                <!-- Payments Table -->
+                <div class="w-full p-2 mt-2 relative overflow-x-auto">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100 border-b border-blue-900">
+                                <th class="p-3 text-center">DATE/TIME</th>
+                                <th class="p-3 text-center">BANK</th>
+                                <th class="p-3 text-center">STATUS</th>
+                                <th class="p-3 text-center">OR NO.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentTable">
+                            <!-- Payment history will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="h-20"></div> <!-- Added space at the bottom -->
+        </div>
+    `;
+
+    const confirmInsuranceBtn = document.getElementById("confirmInsuranceBtn");
+    const confirmPaymentBtn = document.getElementById("confirmPaymentBtn");
+    const insuranceTable = document.getElementById("insuranceTable");
+    const paymentTable = document.getElementById("paymentTable");
+    const insuranceSearchInput = document.getElementById("insuranceSearchInput");
+    const paymentSearchInput = document.getElementById("paymentSearchInput");
+    const groupNumberInput = document.getElementById("groupNumber");
+
+    // Generate a random group number and display it
+    const randomGroupNumber = Math.floor(100000 + Math.random() * 900000);
+    groupNumberInput.value = randomGroupNumber;
+
+    // Load insurance data from local storage
+    let insuranceData = JSON.parse(localStorage.getItem("insuranceData")) || [];
+    insuranceData.forEach(insurance => {
+        const row = document.createElement("tr");
+        row.classList.add("border-b", "border-blue-900");
+        row.innerHTML = `
+            <td class="p-3 text-center">${insurance.priority}</td>
+            <td class="p-3 text-center">${insurance.planName}</td>
+            <td class="p-3 text-center">${insurance.groupNumber}</td>
+            <td class="p-3 text-center">${insurance.effectiveDate}</td>
+            <td class="p-3 text-center">${insurance.expirationDate}</td>
+            <td class="p-3 text-center">${insurance.active}</td>
+        `;
+        insuranceTable.appendChild(row);
+    });
+
+    // Add event listener to confirm insurance button
+    confirmInsuranceBtn.addEventListener("click", () => {
+        const insurance = {
+            priority: document.getElementById("insurancePriority").value,
+            policyHolder: document.getElementById("policyHolder").value,
+            planType: document.getElementById("planType").value,
+            planName: document.getElementById("planName").value,
+            coverageType: document.getElementById("coverageType").value,
+            groupName: document.getElementById("groupName").value,
+            effectiveDate: document.getElementById("effectiveDate").value,
+            expirationDate: document.getElementById("expirationDate").value,
+            insuranceCompany: document.getElementById("insuranceCompany").value,
+            groupNumber: groupNumberInput.value,
+            active: "NO"
+        };
+
+        const row = document.createElement("tr");
+        row.classList.add("border-b", "border-blue-900");
+        row.innerHTML = `
+            <td class="p-3 text-center">${insurance.priority}</td>
+            <td class="p-3 text-center">${insurance.planName}</td>
+            <td class="p-3 text-center">${insurance.groupNumber}</td>
+            <td class="p-3 text-center">${insurance.effectiveDate}</td>
+            <td class="p-3 text-center">${insurance.expirationDate}</td>
+            <td class="p-3 text-center">${insurance.active}</td>
+        `;
+        insuranceTable.appendChild(row);
+
+        // Store insurance data in local storage
+        insuranceData.push(insurance);
+        localStorage.setItem("insuranceData", JSON.stringify(insuranceData));
+
+        // Clear the form inputs
+        document.getElementById("insurancePriority").value = "Primary";
+        document.getElementById("policyHolder").value = "Self";
+        document.getElementById("planType").value = "hmo";
+        document.getElementById("planName").value = "Basic";
+        document.getElementById("coverageType").value = "Medical";
+        document.getElementById("groupName").value = "group_a";
+        document.getElementById("effectiveDate").value = "";
+        document.getElementById("expirationDate").value = "";
+        document.getElementById("insuranceCompany").value = "company_a";
+        groupNumberInput.value = Math.floor(100000 + Math.random() * 900000);
+    });
+
+    // Add event listener to confirm payment button
+    confirmPaymentBtn.addEventListener("click", () => {
+        const paymentDate = document.getElementById("paymentDate").value;
+        const paymentTime = document.getElementById("paymentTime").value;
+        const paymentBank = document.getElementById("paymentBank").value;
+
+        // Generate a random OR No.
+        const paymentOR = `OR-${Math.floor(100000 + Math.random() * 900000)}`;
+
+        if (paymentDate && paymentTime && paymentBank) {
+            const newRow = document.createElement("tr");
+            newRow.classList.add("text-center", "border-b-2", "border-blue-900");
+
+            newRow.innerHTML = `
+                <td class="p-2">${paymentDate} ${paymentTime}</td>
+                <td class="p-2">${paymentBank}</td>
+                <td class="p-2">POSTED</td>
+                <td class="p-2 text-blue-900 font-semibold">${paymentOR}</td>
+            `;
+
+            paymentTable.appendChild(newRow);
+
+            // Clear the form inputs
+            document.getElementById("paymentDate").value = "";
+            document.getElementById("paymentTime").value = "";
+            document.getElementById("paymentBank").value = "";
+            document.getElementById("proofOfPaymentInput").value = "";
+
+            // Update insurance data in local storage
+            insuranceData.forEach(insurance => {
+                insurance.active = "YES";
+            });
+            localStorage.setItem("insuranceData", JSON.stringify(insuranceData));
+
+            // Update the insurance table
+            const rows = insuranceTable.querySelectorAll("tr");
+            rows.forEach(row => {
+                const activeCell = row.querySelectorAll("td")[5]; // Active status is in the 6th column
+                if (activeCell) {
+                    activeCell.textContent = "YES";
+                }
+            });
+        } else {
+            alert("Please fill in all fields before confirming payment.");
+        }
+    });
+
+    // Search functionality for insurance table
+    insuranceSearchInput.addEventListener("input", function () {
+        const searchValue = insuranceSearchInput.value.toLowerCase();
+        const rows = insuranceTable.querySelectorAll("tr");
+        rows.forEach(row => {
+            const cells = row.querySelectorAll("td");
+            const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(searchValue));
+            row.style.display = match ? "" : "none";
+        });
+    });
+
+    // Search functionality for payment table
+    paymentSearchInput.addEventListener("input", function () {
+        const searchValue = paymentSearchInput.value.toLowerCase();
+        const rows = paymentTable.querySelectorAll("tr");
+
+        rows.forEach(row => {
+            const orCell = row.querySelectorAll("td")[3]; // OR number is in the 4th column
+            if (orCell) {
+                const orText = orCell.textContent.toLowerCase();
+                row.style.display = orText.includes(searchValue) ? "" : "none";
+            }
+        });
+    });
+}
+
                     
                     
                     
