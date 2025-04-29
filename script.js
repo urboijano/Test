@@ -1996,7 +1996,7 @@
             const groupedData = groupDataByDate(dataList);
             const tableContent = generateTableContent(groupedData);
             document.getElementById("patientHistory").innerHTML = tableContent;
-            updateChart(dataList[dataList.length - 1]); // Update the chart with the latest data
+            updateChart(dataList); // Update the chart with the latest data
         }
 
         // Hide the patient list and update modal title
@@ -2075,47 +2075,78 @@
     }
 
     // Function to update the chart
-    function updateChart(data) {
+    function updateChart(dataList) {
         const ctx = document.getElementById('vitalSignsChart').getContext('2d');
+
+        // Prepare data for the chart
         const chartData = {
-            labels: ['Blood Pressure', 'Temperature', 'Pulse Rate', 'Respiratory Rate', 'Oxygen Saturation', 'Pain Scale'],
-            datasets: [{
-                label: 'Vital Signs',
-                data: [
-                    parseInt(data.bloodPressure.split('/')[0]), // Systolic Blood Pressure
-                    data.temperature,
-                    data.pulseRate,
-                    data.respiratoryRate,
-                    data.oxygenSaturation,
-                    parseInt(data.painScale)
-                ],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)', // Blood Pressure
-                    'rgba(54, 162, 235, 0.2)', // Temperature
-                    'rgba(255, 206, 86, 0.2)', // Pulse Rate
-                    'rgba(75, 192, 192, 0.2)', // Respiratory Rate
-                    'rgba(153, 102, 255, 0.2)', // Oxygen Saturation
-                    'rgba(255, 159, 64, 0.2)'  // Pain Scale
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
+            labels: dataList.map(data => `${data.date} ${data.time}`),
+            datasets: [
+                {
+                    label: 'Blood Pressure (Systolic)',
+                    data: dataList.map(data => parseInt(data.bloodPressure.split('/')[0])),
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: false,
+                },
+                {
+                    label: 'Temperature',
+                    data: dataList.map(data => data.temperature),
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    fill: false,
+                },
+                {
+                    label: 'Pulse Rate',
+                    data: dataList.map(data => data.pulseRate),
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    fill: false,
+                },
+                {
+                    label: 'Respiratory Rate',
+                    data: dataList.map(data => data.respiratoryRate),
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: false,
+                },
+                {
+                    label: 'Oxygen Saturation',
+                    data: dataList.map(data => data.oxygenSaturation),
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    fill: false,
+                },
+                {
+                    label: 'Pain Scale',
+                    data: dataList.map(data => parseInt(data.painScale)),
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    fill: false,
+                }
+            ]
         };
 
         const config = {
-            type: 'bar',
+            type: 'line',
             data: chartData,
             options: {
                 scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'hour'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Time'
+                        }
+                    },
                     y: {
-                        beginAtZero: true
+                        title: {
+                            display: true,
+                            text: 'Value'
+                        }
                     }
                 }
             }
@@ -2125,15 +2156,12 @@
     }
 
     // Initialize the chart with default data
-    updateChart({
-        bloodPressure: '120/80',
-        temperature: 37,
-        pulseRate: 72,
-        respiratoryRate: 18,
-        oxygenSaturation: 98,
-        painScale: '0'
-    });
+    updateChart([
+        { date: '2025-04-04', time: '08:00', bloodPressure: '120/80', temperature: 37, pulseRate: 72, respiratoryRate: 18, oxygenSaturation: 98, painScale: '0' },
+        { date: '2025-04-04', time: '12:00', bloodPressure: '115/75', temperature: 36.8, pulseRate: 70, respiratoryRate: 17, oxygenSaturation: 97, painScale: '1' }
+    ]);
 }
+
 
         
         
