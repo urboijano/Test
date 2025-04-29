@@ -1725,348 +1725,706 @@
         
 
         function showVitalSigns() {
-    content.innerHTML = `
-        <div class="p-6 bg-gray rounded-lg relative -mt-6 h-[80vh] overflow-y-auto">
-            <!-- Date & Time -->
-            <div class="grid grid-cols-2 gap-6 mb-6">
-                <div>
-                    <label for="date" class="block text-blue-900 font-semibold">Date of Assessment</label>
-                    <input type="date" id="date" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
+            content.innerHTML = `
+                <div class="p-6 bg-gray rounded-lg relative -mt-6 h-[80vh] overflow-y-auto">
+                    <!-- Date & Time -->
+                    <div class="grid grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="date" class="block text-blue-900 font-semibold">Date of Assessment</label>
+                            <input type="date" id="date" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
+                        </div>
+                        <div>
+                            <label for="time" class="block text-blue-900 font-semibold">Time of Assessment (24H Format)</label>
+                            <input type="time" id="time" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
+                        </div>
+                    </div>
+        
+                    <!-- Vital Signs Inputs -->
+                    <div class="grid grid-cols-3 gap-6">
+                        <div>
+                            <label for="bloodPressure" class="block text-blue-900 font-semibold">Blood Pressure</label>
+                            <input type="text" id="bloodPressure" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
+                        </div>
+                        <div>
+                            <label for="temperature" class="block text-blue-900 font-semibold">Temperature</label>
+                            <input type="number" id="temperature" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
+                        </div>
+                        <div>
+                            <label for="pulseRate" class="block text-blue-900 font-semibold">Pulse Rate</label>
+                            <input type="number" id="pulseRate" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
+                        </div>
+                        <div>
+                            <label for="respiratoryRate" class="block text-blue-900 font-semibold">Respiratory Rate</label>
+                            <input type="number" id="respiratoryRate" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
+                        </div>
+                        <div>
+                            <label for="oxygenSaturation" class="block text-blue-900 font-semibold">Oxygen Saturation</label>
+                            <input type="number" id="oxygenSaturation" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
+                        </div>
+                        <div>
+                            <label for="painScale" class="block text-blue-900 font-semibold">Pain Scale</label>
+                            <input type="text" id="painScale" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
+                        </div>
+                    </div>
+        
+                    <!-- Intake Table -->
+                    <div class="mt-8">
+                        <table class="min-w-full bg-white border border-blue-700">
+                            <thead>
+                                <tr>
+                                    <th colspan="5" class="py-2 px-4 border-b text-center">INTAKE</th>
+                                </tr>
+                                <tr>
+                                    <th class="py-2 px-4 border-b">DATE</th>
+                                    <th class="py-2 px-4 border-b">TIME</th>
+                                    <th class="py-2 px-4 border-b">ORAL</th>
+                                    <th class="py-2 px-4 border-b">PARENTERAL</th>
+                                    <th class="py-2 px-4 border-b">TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-2 px-4 border-b"><input type="date" id="intakeDate1" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                                    <td class="py-2 px-4 border-b"><input type="time" id="intakeTime1" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                                    <td class="py-2 px-4 border-b"><input type="text" id="intakeOral1" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                                    <td class="py-2 px-4 border-b"><input type="text" id="intakeParenteral1" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                                    <td class="py-2 px-4 border-b"><input type="text" id="intakeTotal1" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b">TOTAL</td>
+                                    <td class="py-2 px-4 border-b"></td>
+                                    <td class="py-2 px-4 border-b"><input type="text" id="intakeTotalOral" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                                    <td class="py-2 px-4 border-b"><input type="text" id="intakeTotalParenteral" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                                    <td class="py-2 px-4 border-b"><input type="text" id="intakeGrandTotal" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+        
+                    <!-- Output Table -->
+                    <div class="mt-8">
+                        <table class="min-w-full bg-white border border-blue-700">
+                            <thead>
+                                <tr>
+                                    <th colspan="6" class="py-2 px-4 border-b text-center">OUTPUT</th>
+                                </tr>
+                                <tr>
+                                    <th class="py-2 px-4 border-b">DATE</th>
+                                    <th class="py-2 px-4 border-b">TIME</th>
+                                    <th class="py-2 px-4 border-b">URINE</th>
+                                    <th class="py-2 px-4 border-b">DRAINAGE</th>
+                                    <th class="py-2 px-4 border-b">OTHERS</th>
+                                    <th class="py-2 px-4 border-b">TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-2 px-4 border-b"><input type="date" id="outputDate1" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                                    <td class="py-2 px-4 border-b"><input type="time" id="outputTime1" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                                    <td class="py-2 px-4 border-b"><input type="text" id="outputUrine1" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                                    <td class="py-2 px-4 border-b"><input type="text" id="outputDrainage1" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                                    <td class="py-2 px-4 border-b"><input type="text" id="outputOthers1" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                                    <td class="py-2 px-4 border-b"><input type="text" id="outputTotal1" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b">TOTAL</td>
+                                    <td class="py-2 px-4 border-b"></td>
+                                    <td class="py-2 px-4 border-b"><input type="text" id="outputTotalUrine" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                                    <td class="py-2 px-4 border-b"><input type="text" id="outputTotalDrainage" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                                    <td class="py-2 px-4 border-b"><input type="text" id="outputTotalOthers" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                                    <td class="py-2 px-4 border-b"><input type="text" id="outputGrandTotal" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+        
+                    <!-- Discharge Plan Text Area -->
+                    <div class="mt-8">
+                        <label for="dischargePlan" class="block text-blue-900 font-semibold">Discharge Plan</label>
+                        <textarea id="dischargePlan" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300" rows="4"></textarea>
+                    </div>
+        
+                    <!-- Submit and View History Buttons -->
+                    <div class="mt-8 text-right flex justify-end space-x-2">
+                        <button id="submitVitalsButton" class="bg-blue-700 text-white font-semibold px-6 py-2 rounded hover:bg-blue-800">Submit Credentials</button>
+                        <button id="viewHistoryButton" class="bg-blue-700 text-white font-semibold px-6 py-2 rounded hover:bg-blue-800">View Patient History</button>
+                    </div>
                 </div>
-                <div>
-                    <label for="time" class="block text-blue-900 font-semibold">Time of Assessment (24H Format)</label>
-                    <input type="time" id="time" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
+        
+                <!-- Modal Structure -->
+                <div id="modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+                    <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl p-4 relative" id="modalContent">
+                        <button id="closeModal" class="absolute top-2 right-2 text-black text-2xl font-bold">&times;</button>
+                        <!-- Patient List -->
+                        <div class="overflow-y-auto">
+                            <h3 class="text-2xl font-bold text-blue-900 mb-4 text-center" id="modalTitle">Patients</h3>
+                            <ul id="patientList" class="space-y-2"></ul>
+                            <div id="patientHistory"></div>
+                            <button id="seeGraphButton" class="hidden bg-blue-700 text-white font-semibold px-6 py-2 rounded hover:bg-blue-800 mt-4">See Graph</button>
+                            <button id="seeIntakeOutputButton" class="hidden bg-blue-700 text-white font-semibold px-6 py-2 rounded hover:bg-blue-800 mt-4">Intake and Output</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Vital Signs Table -->
-            <div class="mb-6">
-                <table class="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr>
-                            <th class="py-2 px-4 border-b">Blood Pressure</th>
-                            <th class="py-2 px-4 border-b">Temperature</th>
-                            <th class="py-2 px-4 border-b">Pulse Rate</th>
-                            <th class="py-2 px-4 border-b">Respiratory Rate</th>
-                            <th class="py-2 px-4 border-b">Oxygen Saturation</th>
-                            <th class="py-2 px-4 border-b">Pain Scale</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="py-2 px-4 border-b"><input type="text" id="bloodPressure" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
-                            <td class="py-2 px-4 border-b"><input type="number" id="temperature" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
-                            <td class="py-2 px-4 border-b"><input type="number" id="pulseRate" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
-                            <td class="py-2 px-4 border-b"><input type="number" id="respiratoryRate" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
-                            <td class="py-2 px-4 border-b"><input type="number" id="oxygenSaturation" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
-                            <td class="py-2 px-4 border-b"><input type="text" id="painScale" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Submit and View History Buttons -->
-            <div class="mt-8 text-right flex justify-end space-x-2">
-                <button id="submitVitalsButton" class="bg-blue-700 text-white font-semibold px-6 py-2 rounded hover:bg-blue-800">Submit Credentials</button>
-                <button id="viewHistoryButton" class="bg-blue-700 text-white font-semibold px-6 py-2 rounded hover:bg-blue-800">View Patient History</button>
-            </div>
-        </div>
-
-        <!-- Modal Structure -->
-        <div id="modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-            <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl p-4 relative" id="modalContent">
-                <button id="closeModal" class="absolute top-2 right-2 text-black text-2xl font-bold">&times;</button>
-                <!-- Patient List -->
-                <div class="overflow-y-auto">
-                    <h3 class="text-2xl font-bold text-blue-900 mb-4 text-center" id="modalTitle">Patients</h3>
-                    <ul id="patientList" class="space-y-2"></ul>
-                    <div id="patientHistory"></div>
+        
+                <!-- Graph Modal Structure -->
+                <div id="graphModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+                    <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl p-4 relative">
+                        <button id="closeGraphModal" class="absolute top-2 right-2 text-black text-2xl font-bold">&times;</button>
+                        <h3 class="text-2xl font-bold text-blue-900 mb-4 text-center" id="graphModalTitle">Vital Signs Graph</h3>
+                        <canvas id="vitalSignsChart" width="400" height="200"></canvas>
+                    </div>
                 </div>
-            </div>
-        </div>
-    `;
-
-    setActiveButtons(vitalBtn);
-
-    let patientCredentials = {};
-
-    // Validation Helpers
-    const setInvalidStyle = (input) => {
-        input.classList.remove("border-blue-700");
-        input.classList.add("border-red-500");
-    };
-
-    const setValidStyle = (input) => {
-        input.classList.remove("border-red-500");
-        input.classList.add("border-blue-700");
-    };
-
-    // Temperature validation
-    const temperatureInput = document.getElementById("temperature");
-    temperatureInput.addEventListener("input", () => {
-        const val = parseFloat(temperatureInput.value);
-        if (!isNaN(val) && (val < 36.5 || val > 37.5)) {
-            setInvalidStyle(temperatureInput);
-        } else {
-            setValidStyle(temperatureInput);
-        }
-    });
-
-    // Blood Pressure validation (mark below 120/80 as "not good")
-    const bloodPressureInput = document.getElementById("bloodPressure");
-    bloodPressureInput.addEventListener("input", () => {
-        const value = bloodPressureInput.value.trim();
-        const pattern = /^\d{2,3}\/\d{2,3}$/;
-
-        if (!pattern.test(value)) {
-            setInvalidStyle(bloodPressureInput);
-            return;
-        }
-
-        const [sys, dia] = value.split('/').map(Number);
-        if (sys < 120 || dia < 80) {
-            setInvalidStyle(bloodPressureInput);
-        } else {
-            setValidStyle(bloodPressureInput);
-        }
-    });
-
-    // Pulse Rate validation
-    const pulseRateInput = document.getElementById("pulseRate");
-    pulseRateInput.addEventListener("input", () => {
-        const val = parseFloat(pulseRateInput.value);
-        if (!isNaN(val) && (val < 60 || val > 100)) {
-            setInvalidStyle(pulseRateInput);
-        } else {
-            setValidStyle(pulseRateInput);
-        }
-    });
-
-    // Respiratory Rate validation
-    const respiratoryRateInput = document.getElementById("respiratoryRate");
-    respiratoryRateInput.addEventListener("input", () => {
-        const val = parseFloat(respiratoryRateInput.value);
-        if (!isNaN(val) && (val < 16 || val > 20)) {
-            setInvalidStyle(respiratoryRateInput);
-        } else {
-            setValidStyle(respiratoryRateInput);
-        }
-    });
-
-    // Oxygen Saturation validation
-    const oxygenSaturationInput = document.getElementById("oxygenSaturation");
-    oxygenSaturationInput.addEventListener("input", () => {
-        const val = parseFloat(oxygenSaturationInput.value);
-        if (!isNaN(val) && (val < 95 || val > 100)) {
-            setInvalidStyle(oxygenSaturationInput);
-        } else {
-            setValidStyle(oxygenSaturationInput);
-        }
-    });
-
-    // Submit Credentials Button
-    document.getElementById("submitVitalsButton").addEventListener("click", function() {
-        const requiredFields = ["date", "time", "bloodPressure", "temperature", "pulseRate", "respiratoryRate", "oxygenSaturation", "painScale"];
-        let isValid = true;
-
-        requiredFields.forEach(fieldId => {
-            const field = document.getElementById(fieldId);
-            if (!field.value.trim()) {
-                isValid = false;
-            }
-        });
-
-        if (!isValid) {
-            alert("Please fill out all required fields before submitting.");
-            return;
-        }
-
-        const patients = JSON.parse(localStorage.getItem("patients")) || [];
-        const patientListContainer = document.getElementById("patientList");
-        patientListContainer.innerHTML = ""; // Clear any previous list
-
-        if (patients.length > 0) {
-            patients.forEach(patient => {
-                const listItem = document.createElement("li");
-                listItem.textContent = patient.name;
-                listItem.classList.add("cursor-pointer", "text-blue-600", "hover:underline", "text-center", "p-2", "border", "rounded");
-                listItem.addEventListener("click", () => submitCredentialsToPatient(patient));
-                patientListContainer.appendChild(listItem);
-            });
-        } else {
-            patientListContainer.innerHTML = "<p class='text-center'>No patients found.</p>";
-        }
-
-        // Show the modal
-        document.getElementById("modal").classList.remove("hidden");
-        document.getElementById("modalTitle").textContent = "Select Patient";
-        document.getElementById("patientHistory").innerHTML = ""; // Clear any previous history
-    });
-
-    // View Patient History Button
-    document.getElementById("viewHistoryButton").addEventListener("click", function() {
-        const patients = JSON.parse(localStorage.getItem("patients")) || [];
-        const patientListContainer = document.getElementById("patientList");
-        patientListContainer.innerHTML = ""; // Clear any previous list
-
-        if (patients.length > 0) {
-            patients.forEach(patient => {
-                const listItem = document.createElement("li");
-                listItem.textContent = patient.name;
-                listItem.classList.add("cursor-pointer", "text-blue-600", "hover:underline", "text-center", "p-2", "border", "rounded");
-                listItem.addEventListener("click", () => viewPatientCredentials(patient));
-                patientListContainer.appendChild(listItem);
-            });
-        } else {
-            patientListContainer.innerHTML = "<p class='text-center'>No patients found.</p>";
-        }
-
-        // Show the modal
-        document.getElementById("modal").classList.remove("hidden");
-        document.getElementById("modalTitle").textContent = "Select Patient";
-        document.getElementById("patientHistory").innerHTML = ""; // Clear any previous history
-    });
-
-    document.getElementById("closeModal").addEventListener("click", function() {
-        // Clear input fields
-        clearInputFields();
-        // Hide the modal
-        document.getElementById("modal").classList.add("hidden");
-        // Reset modal title and content
-        document.getElementById("modalTitle").textContent = "Patients";
-        document.getElementById("patientList").innerHTML = "";
-        document.getElementById("patientHistory").innerHTML = "";
-        // Reset modal size
-        document.getElementById("modalContent").classList.remove("max-w-4xl");
-        document.getElementById("modalContent").classList.add("max-w-md");
-    });
-
-    // Function to submit credentials to a specific patient
-    function submitCredentialsToPatient(patient) {
-        const data = {
-            date: document.getElementById("date").value,
-            time: document.getElementById("time").value,
-            bloodPressure: document.getElementById("bloodPressure").value,
-            temperature: document.getElementById("temperature").value,
-            pulseRate: document.getElementById("pulseRate").value,
-            respiratoryRate: document.getElementById("respiratoryRate").value,
-            oxygenSaturation: document.getElementById("oxygenSaturation").value,
-            painScale: document.getElementById("painScale").value,
-        };
-
-        const patients = JSON.parse(localStorage.getItem("patients")) || [];
-
-        const updatedPatients = patients.map(p => {
-            if (p.id === patient.id) {
-                // Initialize credentials array if missing
-                if (!Array.isArray(p.credentials)) {
-                    p.credentials = [];
+        
+                <!-- Intake and Output Modal Structure -->
+                <div id="intakeOutputModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+                    <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl p-4 relative overflow-y-auto max-h-[80vh]">
+                        <button id="closeIntakeOutputModal" class="absolute top-2 right-2 text-black text-2xl font-bold">&times;</button>
+                        <h3 class="text-2xl font-bold text-blue-900 mb-4 text-center" id="intakeOutputModalTitle">Intake and Output</h3>
+                        <!-- Intake Table -->
+                        <div class="mt-8">
+                            <table class="min-w-full bg-white border border-blue-700">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="py-2 px-4 border-b text-center">INTAKE</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="py-2 px-4 border-b">DATE</th>
+                                        <th class="py-2 px-4 border-b">TIME</th>
+                                        <th class="py-2 px-4 border-b">ORAL</th>
+                                        <th class="py-2 px-4 border-b">PARENTERAL</th>
+                                        <th class="py-2 px-4 border-b">TOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="intakeTableBody">
+                                    <!-- Intake data will be dynamically inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+        
+                        <!-- Output Table -->
+                        <div class="mt-8">
+                            <table class="min-w-full bg-white border border-blue-700">
+                                <thead>
+                                    <tr>
+                                        <th colspan="6" class="py-2 px-4 border-b text-center">OUTPUT</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="py-2 px-4 border-b">DATE</th>
+                                        <th class="py-2 px-4 border-b">TIME</th>
+                                        <th class="py-2 px-4 border-b">URINE</th>
+                                        <th class="py-2 px-4 border-b">DRAINAGE</th>
+                                        <th class="py-2 px-4 border-b">OTHERS</th>
+                                        <th class="py-2 px-4 border-b">TOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="outputTableBody">
+                                    <!-- Output data will be dynamically inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+        
+                        <!-- Discharge Plan Text Area -->
+                        <div class="mt-8">
+                            <label for="dischargePlanModal" class="block text-blue-900 font-semibold">Discharge Plan</label>
+                            <textarea id="dischargePlanModal" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300" rows="4" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
+        
+            setActiveButtons(vitalBtn);
+        
+            let patientCredentials = {};
+        
+            // Validation Helpers
+            const setInvalidStyle = (input) => {
+                input.classList.remove("border-blue-700");
+                input.classList.add("border-red-500");
+            };
+        
+            const setValidStyle = (input) => {
+                input.classList.remove("border-red-500");
+                input.classList.add("border-blue-700");
+            };
+        
+            // Temperature validation
+            const temperatureInput = document.getElementById("temperature");
+            temperatureInput.addEventListener("input", () => {
+                const val = parseFloat(temperatureInput.value);
+                if (!isNaN(val) && (val < 36.5 || val > 37.5)) {
+                    setInvalidStyle(temperatureInput);
+                } else {
+                    setValidStyle(temperatureInput);
                 }
-
-                // Push the new vital sign record
-                p.credentials.push(data);
-            }
-            return p;
-        });
-
-        localStorage.setItem("patients", JSON.stringify(updatedPatients));
-
-        alert(`Credentials submitted to ${patient.name}`);
-        clearInputFields();
-        document.getElementById("modal").classList.add("hidden");
-    }
-
-    // Function to view patient credentials
-    function viewPatientCredentials(patient) {
-        const patients = JSON.parse(localStorage.getItem("patients")) || [];
-        const current = patients.find(p => p.id === patient.id);
-        const dataList = current?.credentials || [];
-
-        if (dataList.length === 0) {
-            document.getElementById("patientHistory").innerHTML = `<p class="text-center">No credentials submitted for ${patient.name}.</p>`;
-        } else {
-            const groupedData = groupDataByDate(dataList);
-            const tableContent = generateTableContent(groupedData);
-            document.getElementById("patientHistory").innerHTML = tableContent;
-        }
-
-        // Hide the patient list and update modal title
-        document.getElementById("patientList").innerHTML = "";
-        document.getElementById("modalTitle").textContent = `Patient History for ${patient.name}`;
-
-        // Adjust modal size for viewing patient history
-        document.getElementById("modalContent").classList.remove("max-w-md");
-        document.getElementById("modalContent").classList.add("max-w-4xl");
-    }
-
-    // Function to group data by date
-    function groupDataByDate(dataList) {
-        return dataList.reduce((acc, data) => {
-            const date = data.date;
-            if (!acc[date]) {
-                acc[date] = [];
-            }
-            acc[date].push(data);
-            return acc;
-        }, {});
-    }
-
-    // Function to generate table content
-    function generateTableContent(groupedData) {
-        let tableContent = `
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr>
-                        <th class="py-2 px-4 border-b">Date</th>
-                        <th class="py-2 px-4 border-b">Time</th>
-                        <th class="py-2 px-4 border-b">Blood Pressure</th>
-                        <th class="py-2 px-4 border-b">Temperature</th>
-                        <th class="py-2 px-4 border-b">Pulse Rate</th>
-                        <th class="py-2 px-4 border-b">Respiratory Rate</th>
-                        <th class="py-2 px-4 border-b">Oxygen Saturation</th>
-                        <th class="py-2 px-4 border-b">Pain Scale</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-
-        for (const date in groupedData) {
-            groupedData[date].forEach(data => {
-                tableContent += `
-                    <tr>
-                        <td class="py-2 px-4 border-b">${date}</td>
-                        <td class="py-2 px-4 border-b">${data.time}</td>
-                        <td class="py-2 px-4 border-b">${data.bloodPressure}</td>
-                        <td class="py-2 px-4 border-b">${data.temperature}</td>
-                        <td class="py-2 px-4 border-b">${data.pulseRate}</td>
-                        <td class="py-2 px-4 border-b">${data.respiratoryRate}</td>
-                        <td class="py-2 px-4 border-b">${data.oxygenSaturation}</td>
-                        <td class="py-2 px-4 border-b">${data.painScale}</td>
-                    </tr>
-                `;
             });
+        
+            // Blood Pressure validation (mark below 120/80 as "not good")
+            const bloodPressureInput = document.getElementById("bloodPressure");
+            bloodPressureInput.addEventListener("input", () => {
+                const value = bloodPressureInput.value.trim();
+                const pattern = /^\d{2,3}\/\d{2,3}$/;
+        
+                if (!pattern.test(value)) {
+                    setInvalidStyle(bloodPressureInput);
+                    return;
+                }
+        
+                const [sys, dia] = value.split('/').map(Number);
+                if (sys < 120 || dia < 80) {
+                    setInvalidStyle(bloodPressureInput);
+                } else {
+                    setValidStyle(bloodPressureInput);
+                }
+            });
+        
+            // Pulse Rate validation
+            const pulseRateInput = document.getElementById("pulseRate");
+            pulseRateInput.addEventListener("input", () => {
+                const val = parseFloat(pulseRateInput.value);
+                if (!isNaN(val) && (val < 60 || val > 100)) {
+                    setInvalidStyle(pulseRateInput);
+                } else {
+                    setValidStyle(pulseRateInput);
+                }
+            });
+        
+            // Respiratory Rate validation
+            const respiratoryRateInput = document.getElementById("respiratoryRate");
+            respiratoryRateInput.addEventListener("input", () => {
+                const val = parseFloat(respiratoryRateInput.value);
+                if (!isNaN(val) && (val < 16 || val > 20)) {
+                    setInvalidStyle(respiratoryRateInput);
+                } else {
+                    setValidStyle(respiratoryRateInput);
+                }
+            });
+        
+            // Oxygen Saturation validation
+            const oxygenSaturationInput = document.getElementById("oxygenSaturation");
+            oxygenSaturationInput.addEventListener("input", () => {
+                const val = parseFloat(oxygenSaturationInput.value);
+                if (!isNaN(val) && (val < 95 || val > 100)) {
+                    setInvalidStyle(oxygenSaturationInput);
+                } else {
+                    setValidStyle(oxygenSaturationInput);
+                }
+            });
+        
+            // Submit Credentials Button
+            document.getElementById("submitVitalsButton").addEventListener("click", function() {
+                const requiredFields = ["date", "time", "bloodPressure", "temperature", "pulseRate", "respiratoryRate", "oxygenSaturation", "painScale"];
+                let isValid = true;
+        
+                requiredFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (!field.value.trim()) {
+                        isValid = false;
+                    }
+                });
+        
+                if (!isValid) {
+                    alert("Please fill out all required fields before submitting.");
+                    return;
+                }
+        
+                const patients = JSON.parse(localStorage.getItem("patients")) || [];
+                const patientListContainer = document.getElementById("patientList");
+                patientListContainer.innerHTML = ""; // Clear any previous list
+        
+                if (patients.length > 0) {
+                    patients.forEach(patient => {
+                        const listItem = document.createElement("li");
+                        listItem.textContent = patient.name;
+                        listItem.classList.add("cursor-pointer", "text-blue-600", "hover:underline", "text-center", "p-2", "border", "rounded");
+                        listItem.addEventListener("click", () => submitCredentialsToPatient(patient));
+                        patientListContainer.appendChild(listItem);
+                    });
+                } else {
+                    patientListContainer.innerHTML = "<p class='text-center'>No patients found.</p>";
+                }
+        
+                // Show the modal
+                document.getElementById("modal").classList.remove("hidden");
+                document.getElementById("modalTitle").textContent = "Select Patient";
+                document.getElementById("patientHistory").innerHTML = ""; // Clear any previous history
+            });
+        
+            // View Patient History Button
+            document.getElementById("viewHistoryButton").addEventListener("click", function() {
+                const patients = JSON.parse(localStorage.getItem("patients")) || [];
+                const patientListContainer = document.getElementById("patientList");
+                patientListContainer.innerHTML = ""; // Clear any previous list
+        
+                if (patients.length > 0) {
+                    patients.forEach(patient => {
+                        const listItem = document.createElement("li");
+                        listItem.textContent = patient.name;
+                        listItem.classList.add("cursor-pointer", "text-blue-600", "hover:underline", "text-center", "p-2", "border", "rounded");
+                        listItem.addEventListener("click", () => viewPatientCredentials(patient));
+                        patientListContainer.appendChild(listItem);
+                    });
+                } else {
+                    patientListContainer.innerHTML = "<p class='text-center'>No patients found.</p>";
+                }
+        
+                // Show the modal
+                document.getElementById("modal").classList.remove("hidden");
+                document.getElementById("modalTitle").textContent = "Select Patient";
+                document.getElementById("patientHistory").innerHTML = ""; // Clear any previous history
+            });
+        
+            document.getElementById("closeModal").addEventListener("click", function() {
+                // Clear input fields
+                clearInputFields();
+                // Hide the modal
+                document.getElementById("modal").classList.add("hidden");
+                // Reset modal title and content
+                document.getElementById("modalTitle").textContent = "Patients";
+                document.getElementById("patientList").innerHTML = "";
+                document.getElementById("patientHistory").innerHTML = "";
+                // Reset modal size
+                document.getElementById("modalContent").classList.remove("max-w-4xl");
+                document.getElementById("modalContent").classList.add("max-w-md");
+                // Hide the see graph button
+                document.getElementById("seeGraphButton").classList.add("hidden");
+                // Hide the see intake and output button
+                document.getElementById("seeIntakeOutputButton").classList.add("hidden");
+            });
+        
+            document.getElementById("seeGraphButton").addEventListener("click", function() {
+                const patientName = document.getElementById("modalTitle").textContent.replace("Patient History for ", "");
+                const patients = JSON.parse(localStorage.getItem("patients")) || [];
+                const current = patients.find(p => p.name === patientName);
+                const dataList = current?.credentials || [];
+        
+                if (dataList.length === 0) {
+                    alert(`No credentials submitted for ${patientName}.`);
+                    return;
+                }
+        
+                const groupedData = groupDataByDate(dataList);
+                renderChart(groupedData, patientName);
+        
+                // Show the graph modal
+                document.getElementById("graphModal").classList.remove("hidden");
+                document.getElementById("graphModalTitle").textContent = `Vital Signs Graph for ${patientName}`;
+            });
+        
+            document.getElementById("seeIntakeOutputButton").addEventListener("click", function() {
+                const patientName = document.getElementById("modalTitle").textContent.replace("Patient History for ", "");
+                const patients = JSON.parse(localStorage.getItem("patients")) || [];
+                const current = patients.find(p => p.name === patientName);
+        
+                if (current && current.intakeOutput) {
+                    displayIntakeOutput(current.intakeOutput);
+                } else {
+                    alert(`No intake and output data found for ${patientName}.`);
+                }
+        
+                // Show the intake and output modal
+                document.getElementById("intakeOutputModal").classList.remove("hidden");
+                document.getElementById("intakeOutputModalTitle").textContent = `Intake and Output for ${patientName}`;
+            });
+        
+            document.getElementById("closeGraphModal").addEventListener("click", function() {
+                // Hide the graph modal
+                document.getElementById("graphModal").classList.add("hidden");
+            });
+        
+            document.getElementById("closeIntakeOutputModal").addEventListener("click", function() {
+                // Hide the intake and output modal
+                document.getElementById("intakeOutputModal").classList.add("hidden");
+            });
+        
+            // Function to submit credentials to a specific patient
+            function submitCredentialsToPatient(patient) {
+                const data = {
+                    date: document.getElementById("date").value,
+                    time: document.getElementById("time").value,
+                    bloodPressure: document.getElementById("bloodPressure").value,
+                    temperature: document.getElementById("temperature").value,
+                    pulseRate: document.getElementById("pulseRate").value,
+                    respiratoryRate: document.getElementById("respiratoryRate").value,
+                    oxygenSaturation: document.getElementById("oxygenSaturation").value,
+                    painScale: document.getElementById("painScale").value,
+                    intakeOutput: {
+                        intake: [
+                            {
+                                date: document.getElementById("intakeDate1").value,
+                                time: document.getElementById("intakeTime1").value,
+                                oral: document.getElementById("intakeOral1").value,
+                                parenteral: document.getElementById("intakeParenteral1").value,
+                                total: document.getElementById("intakeTotal1").value,
+                            },
+                            {
+                                date: 'TOTAL',
+                                time: '',
+                                oral: document.getElementById("intakeTotalOral").value,
+                                parenteral: document.getElementById("intakeTotalParenteral").value,
+                                total: document.getElementById("intakeGrandTotal").value,
+                            }
+                        ],
+                        output: [
+                            {
+                                date: document.getElementById("outputDate1").value,
+                                time: document.getElementById("outputTime1").value,
+                                urine: document.getElementById("outputUrine1").value,
+                                drainage: document.getElementById("outputDrainage1").value,
+                                others: document.getElementById("outputOthers1").value,
+                                total: document.getElementById("outputTotal1").value,
+                            },
+                            {
+                                date: 'TOTAL',
+                                time: '',
+                                urine: document.getElementById("outputTotalUrine").value,
+                                drainage: document.getElementById("outputTotalDrainage").value,
+                                others: document.getElementById("outputTotalOthers").value,
+                                total: document.getElementById("outputGrandTotal").value,
+                            }
+                        ],
+                        dischargePlan: document.getElementById("dischargePlan").value // Ensure dischargePlan is included
+                    }
+                };
+            
+                const patients = JSON.parse(localStorage.getItem("patients")) || [];
+            
+                const updatedPatients = patients.map(p => {
+                    if (p.id === patient.id) {
+                        // Initialize credentials array if missing
+                        if (!Array.isArray(p.credentials)) {
+                            p.credentials = [];
+                        }
+            
+                        // Push the new vital sign record
+                        p.credentials.push(data);
+                        p.intakeOutput = data.intakeOutput;
+                        p.dischargePlan = data.intakeOutput.dischargePlan; // Ensure dischargePlan is stored
+                    }
+                    return p;
+                });
+            
+                localStorage.setItem("patients", JSON.stringify(updatedPatients));
+            
+                alert(`Credentials submitted to ${patient.name}`);
+                clearInputFields();
+                document.getElementById("dischargePlan").value = ''; // Clear the discharge plan text area
+                document.getElementById("modal").classList.add("hidden");
+            }
+            
+        
+            // Function to view patient credentials
+            function viewPatientCredentials(patient) {
+                const patients = JSON.parse(localStorage.getItem("patients")) || [];
+                const current = patients.find(p => p.id === patient.id);
+                const dataList = current?.credentials || [];
+        
+                if (dataList.length === 0) {
+                    document.getElementById("patientHistory").innerHTML = `<p class="text-center">No credentials submitted for ${patient.name}.</p>`;
+                } else {
+                    const groupedData = groupDataByDate(dataList);
+                    const tableContent = generateTableContent(groupedData);
+                    document.getElementById("patientHistory").innerHTML = tableContent;
+                }
+        
+                // Hide the patient list and update modal title
+                document.getElementById("patientList").innerHTML = "";
+                document.getElementById("modalTitle").textContent = `Patient History for ${patient.name}`;
+        
+                // Adjust modal size for viewing patient history
+                document.getElementById("modalContent").classList.remove("max-w-md");
+                document.getElementById("modalContent").classList.add("max-w-4xl");
+        
+                // Show the see graph button
+                document.getElementById("seeGraphButton").classList.remove("hidden");
+                // Show the see intake and output button
+                document.getElementById("seeIntakeOutputButton").classList.remove("hidden");
+            }
+        
+            // Function to display intake and output data in the modal
+            function displayIntakeOutput(intakeOutput) {
+                const intakeTableBody = document.getElementById("intakeTableBody");
+                const outputTableBody = document.getElementById("outputTableBody");
+                const dischargePlanModal = document.getElementById("dischargePlanModal");
+            
+                // Clear previous data
+                intakeTableBody.innerHTML = "";
+                outputTableBody.innerHTML = "";
+                dischargePlanModal.value = "";
+            
+                // Populate intake table
+                intakeOutput.intake.forEach(item => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td class="py-2 px-4 border-b">${item.date}</td>
+                        <td class="py-2 px-4 border-b">${item.time}</td>
+                        <td class="py-2 px-4 border-b">${item.oral}</td>
+                        <td class="py-2 px-4 border-b">${item.parenteral}</td>
+                        <td class="py-2 px-4 border-b">${item.total}</td>
+                    `;
+                    intakeTableBody.appendChild(row);
+                });
+            
+                // Populate output table
+                intakeOutput.output.forEach(item => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td class="py-2 px-4 border-b">${item.date}</td>
+                        <td class="py-2 px-4 border-b">${item.time}</td>
+                        <td class="py-2 px-4 border-b">${item.urine}</td>
+                        <td class="py-2 px-4 border-b">${item.drainage}</td>
+                        <td class="py-2 px-4 border-b">${item.others}</td>
+                        <td class="py-2 px-4 border-b">${item.total}</td>
+                    `;
+                    outputTableBody.appendChild(row);
+                });
+            
+                // Populate discharge plan
+                dischargePlanModal.value = intakeOutput.dischargePlan || "";
+            }
+            
+        
+            // Function to group data by date
+            function groupDataByDate(dataList) {
+                return dataList.reduce((acc, data) => {
+                    const date = data.date;
+                    if (!acc[date]) {
+                        acc[date] = [];
+                    }
+                    acc[date].push(data);
+                    return acc;
+                }, {});
+            }
+        
+            // Function to generate table content
+            function generateTableContent(groupedData) {
+                let tableContent = `
+                    <table class="min-w-full bg-white border border-blue-700">
+                        <thead>
+                            <tr>
+                                <th class="py-2 px-4 border-b">Date</th>
+                                <th class="py-2 px-4 border-b">Time</th>
+                                <th class="py-2 px-4 border-b">Blood Pressure</th>
+                                <th class="py-2 px-4 border-b">Temperature</th>
+                                <th class="py-2 px-4 border-b">Pulse Rate</th>
+                                <th class="py-2 px-4 border-b">Respiratory Rate</th>
+                                <th class="py-2 px-4 border-b">Oxygen Saturation</th>
+                                <th class="py-2 px-4 border-b">Pain Scale</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+        
+                for (const date in groupedData) {
+                    groupedData[date].forEach(data => {
+                        tableContent += `
+                            <tr>
+                                <td class="py-2 px-4 border-b">${date}</td>
+                                <td class="py-2 px-4 border-b">${data.time}</td>
+                                <td class="py-2 px-4 border-b">${data.bloodPressure}</td>
+                                <td class="py-2 px-4 border-b">${data.temperature}</td>
+                                <td class="py-2 px-4 border-b">${data.pulseRate}</td>
+                                <td class="py-2 px-4 border-b">${data.respiratoryRate}</td>
+                                <td class="py-2 px-4 border-b">${data.oxygenSaturation}</td>
+                                <td class="py-2 px-4 border-b">${data.painScale}</td>
+                            </tr>
+                        `;
+                    });
+                }
+        
+                tableContent += `
+                        </tbody>
+                    </table>
+                `;
+        
+                return tableContent;
+            }
+        
+            // Function to render the chart
+            function renderChart(groupedData, patientName) {
+                const ctx = document.getElementById('vitalSignsChart').getContext('2d');
+                const labels = Object.keys(groupedData);
+                const data = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Temperature',
+                            data: labels.map(date => groupedData[date][0].temperature),
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            yAxisID: 'y',
+                        },
+                        {
+                            label: 'Pulse Rate',
+                            data: labels.map(date => groupedData[date][0].pulseRate),
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            yAxisID: 'y1',
+                        },
+                        {
+                            label: 'Respiratory Rate',
+                            data: labels.map(date => groupedData[date][0].respiratoryRate),
+                            borderColor: 'rgba(255, 206, 86, 1)',
+                            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                            yAxisID: 'y1',
+                        },
+                        {
+                            label: 'Oxygen Saturation',
+                            data: labels.map(date => groupedData[date][0].oxygenSaturation),
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            yAxisID: 'y1',
+                        }
+                    ]
+                };
+        
+                const config = {
+                    type: 'line',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        stacked: false,
+                        scales: {
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                grid: {
+                                    drawOnChartArea: false,
+                                },
+                            },
+                        },
+                    },
+                };
+        
+                new Chart(ctx, config);
+            }
+        
+            // Function to clear input fields
+            function clearInputFields() {
+                const inputFields = document.querySelectorAll('input');
+                inputFields.forEach(field => {
+                    field.value = '';
+                    field.classList.remove("border-red-500");
+                    field.classList.add("border-blue-700");
+                });
+            }
         }
-
-        tableContent += `
-                </tbody>
-            </table>
-        `;
-
-        return tableContent;
-    }
-
-    // Function to clear input fields
-    function clearInputFields() {
-        const inputFields = document.querySelectorAll('input');
-        inputFields.forEach(field => {
-            field.value = '';
-            field.classList.remove("border-red-500");
-            field.classList.add("border-blue-700");
-        });
-    }
-}
-
-
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -4390,24 +4748,6 @@
                 }
                 if (!bell.contains(event.target) && !bellDropdown.contains(event.target)) {
                     bellDropdown.classList.add("hidden");
-                }
-            });
-
-            // Logout Button Click Event
-            if (logoutBtn) {
-                logoutBtn.addEventListener("click", function () {
-                    window.location.href = "login.html"; // Redirect to login page
-                });
-            }
-        });
-
-
-
-
-
-
-
-      bellDropdown.classList.add("hidden");
                 }
             });
 
