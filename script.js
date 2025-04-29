@@ -1725,348 +1725,416 @@
         
 
         function showVitalSigns() {
-            content.innerHTML = `
-                <div class="p-6 bg-gray rounded-lg relative -mt-6 h-[80vh] overflow-y-auto">
-                    <!-- Date & Time -->
-                    <div class="grid grid-cols-2 gap-6 mb-6">
-                        <div>
-                            <label for="date" class="block text-blue-900 font-semibold">Date of Assessment</label>
-                            <input type="date" id="date" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
-                        </div>
-                        <div>
-                            <label for="time" class="block text-blue-900 font-semibold">Time of Assessment (24H Format)</label>
-                            <input type="time" id="time" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
-                        </div>
-                    </div>
-        
-                    <!-- Vital Signs Inputs -->
-                    <div class="grid grid-cols-3 gap-6">
-                        <div>
-                            <label for="bloodPressure" class="block text-blue-900 font-semibold">Blood Pressure</label>
-                            <input type="text" id="bloodPressure" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
-                        </div>
-                        <div>
-                            <label for="temperature" class="block text-blue-900 font-semibold">Temperature</label>
-                            <input type="number" id="temperature" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
-                        </div>
-                        <div>
-                            <label for="pulseRate" class="block text-blue-900 font-semibold">Pulse Rate</label>
-                            <input type="number" id="pulseRate" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
-                        </div>
-                        <div>
-                            <label for="respiratoryRate" class="block text-blue-900 font-semibold">Respiratory Rate</label>
-                            <input type="number" id="respiratoryRate" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
-                        </div>
-                        <div>
-                            <label for="oxygenSaturation" class="block text-blue-900 font-semibold">Oxygen Saturation</label>
-                            <input type="number" id="oxygenSaturation" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
-                        </div>
-                        <div>
-                            <label for="painScale" class="block text-blue-900 font-semibold">Pain Scale</label>
-                            <input type="text" id="painScale" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
-                        </div>
-                    </div>
-        
-                    <!-- Submit and View History Buttons -->
-                    <div class="mt-8 text-right flex justify-end space-x-2">
-                        <button id="submitVitalsButton" class="bg-blue-700 text-white font-semibold px-6 py-2 rounded hover:bg-blue-800">Submit Credentials</button>
-                        <button id="viewHistoryButton" class="bg-blue-700 text-white font-semibold px-6 py-2 rounded hover:bg-blue-800">View Patient History</button>
-                    </div>
+    content.innerHTML = `
+        <div class="p-6 bg-gray rounded-lg relative -mt-6 h-[80vh] overflow-y-auto">
+            <!-- Date & Time -->
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label for="date" class="block text-blue-900 font-semibold">Date of Assessment</label>
+                    <input type="date" id="date" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
                 </div>
-        
-                <!-- Modal Structure -->
-                <div id="modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-                    <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl p-4 relative" id="modalContent">
-                        <button id="closeModal" class="absolute top-2 right-2 text-black text-2xl font-bold">&times;</button>
-                        <!-- Patient List -->
-                        <div class="overflow-y-auto">
-                            <h3 class="text-2xl font-bold text-blue-900 mb-4 text-center" id="modalTitle">Patients</h3>
-                            <ul id="patientList" class="space-y-2"></ul>
-                            <div id="patientHistory"></div>
-                        </div>
-                    </div>
+                <div>
+                    <label for="time" class="block text-blue-900 font-semibold">Time of Assessment (24H Format)</label>
+                    <input type="time" id="time" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
                 </div>
-            `;
-        
-            setActiveButtons(vitalBtn);
-        
-            let patientCredentials = {};
-        
-            // Validation Helpers
-            const setInvalidStyle = (input) => {
-                input.classList.remove("border-blue-700");
-                input.classList.add("border-red-500");
-            };
-        
-            const setValidStyle = (input) => {
-                input.classList.remove("border-red-500");
-                input.classList.add("border-blue-700");
-            };
-        
-            // Temperature validation
-            const temperatureInput = document.getElementById("temperature");
-            temperatureInput.addEventListener("input", () => {
-                const val = parseFloat(temperatureInput.value);
-                if (!isNaN(val) && (val < 36.5 || val > 37.5)) {
-                    setInvalidStyle(temperatureInput);
-                } else {
-                    setValidStyle(temperatureInput);
-                }
-            });
-        
-            // Blood Pressure validation (mark below 120/80 as "not good")
-            const bloodPressureInput = document.getElementById("bloodPressure");
-            bloodPressureInput.addEventListener("input", () => {
-                const value = bloodPressureInput.value.trim();
-                const pattern = /^\d{2,3}\/\d{2,3}$/;
-        
-                if (!pattern.test(value)) {
-                    setInvalidStyle(bloodPressureInput);
-                    return;
-                }
-        
-                const [sys, dia] = value.split('/').map(Number);
-                if (sys < 120 || dia < 80) {
-                    setInvalidStyle(bloodPressureInput);
-                } else {
-                    setValidStyle(bloodPressureInput);
-                }
-            });
-        
-            // Pulse Rate validation
-            const pulseRateInput = document.getElementById("pulseRate");
-            pulseRateInput.addEventListener("input", () => {
-                const val = parseFloat(pulseRateInput.value);
-                if (!isNaN(val) && (val < 60 || val > 100)) {
-                    setInvalidStyle(pulseRateInput);
-                } else {
-                    setValidStyle(pulseRateInput);
-                }
-            });
-        
-            // Respiratory Rate validation
-            const respiratoryRateInput = document.getElementById("respiratoryRate");
-            respiratoryRateInput.addEventListener("input", () => {
-                const val = parseFloat(respiratoryRateInput.value);
-                if (!isNaN(val) && (val < 16 || val > 20)) {
-                    setInvalidStyle(respiratoryRateInput);
-                } else {
-                    setValidStyle(respiratoryRateInput);
-                }
-            });
-        
-            // Oxygen Saturation validation
-            const oxygenSaturationInput = document.getElementById("oxygenSaturation");
-            oxygenSaturationInput.addEventListener("input", () => {
-                const val = parseFloat(oxygenSaturationInput.value);
-                if (!isNaN(val) && (val < 95 || val > 100)) {
-                    setInvalidStyle(oxygenSaturationInput);
-                } else {
-                    setValidStyle(oxygenSaturationInput);
-                }
-            });
-        
-            // Submit Credentials Button
-            document.getElementById("submitVitalsButton").addEventListener("click", function() {
-                const requiredFields = ["date", "time", "bloodPressure", "temperature", "pulseRate", "respiratoryRate", "oxygenSaturation", "painScale"];
-                let isValid = true;
-        
-                requiredFields.forEach(fieldId => {
-                    const field = document.getElementById(fieldId);
-                    if (!field.value.trim()) {
-                        isValid = false;
-                    }
-                });
-        
-                if (!isValid) {
-                    alert("Please fill out all required fields before submitting.");
-                    return;
-                }
-        
-                const patients = JSON.parse(localStorage.getItem("patients")) || [];
-                const patientListContainer = document.getElementById("patientList");
-                patientListContainer.innerHTML = ""; // Clear any previous list
-        
-                if (patients.length > 0) {
-                    patients.forEach(patient => {
-                        const listItem = document.createElement("li");
-                        listItem.textContent = patient.name;
-                        listItem.classList.add("cursor-pointer", "text-blue-600", "hover:underline", "text-center", "p-2", "border", "rounded");
-                        listItem.addEventListener("click", () => submitCredentialsToPatient(patient));
-                        patientListContainer.appendChild(listItem);
-                    });
-                } else {
-                    patientListContainer.innerHTML = "<p class='text-center'>No patients found.</p>";
-                }
-        
-                // Show the modal
-                document.getElementById("modal").classList.remove("hidden");
-                document.getElementById("modalTitle").textContent = "Select Patient";
-                document.getElementById("patientHistory").innerHTML = ""; // Clear any previous history
-            });
-        
-            // View Patient History Button
-            document.getElementById("viewHistoryButton").addEventListener("click", function() {
-                const patients = JSON.parse(localStorage.getItem("patients")) || [];
-                const patientListContainer = document.getElementById("patientList");
-                patientListContainer.innerHTML = ""; // Clear any previous list
-        
-                if (patients.length > 0) {
-                    patients.forEach(patient => {
-                        const listItem = document.createElement("li");
-                        listItem.textContent = patient.name;
-                        listItem.classList.add("cursor-pointer", "text-blue-600", "hover:underline", "text-center", "p-2", "border", "rounded");
-                        listItem.addEventListener("click", () => viewPatientCredentials(patient));
-                        patientListContainer.appendChild(listItem);
-                    });
-                } else {
-                    patientListContainer.innerHTML = "<p class='text-center'>No patients found.</p>";
-                }
-        
-                // Show the modal
-                document.getElementById("modal").classList.remove("hidden");
-                document.getElementById("modalTitle").textContent = "Select Patient";
-                document.getElementById("patientHistory").innerHTML = ""; // Clear any previous history
-            });
-        
-            document.getElementById("closeModal").addEventListener("click", function() {
-                // Clear input fields
-                clearInputFields();
-                // Hide the modal
-                document.getElementById("modal").classList.add("hidden");
-                // Reset modal title and content
-                document.getElementById("modalTitle").textContent = "Patients";
-                document.getElementById("patientList").innerHTML = "";
-                document.getElementById("patientHistory").innerHTML = "";
-                // Reset modal size
-                document.getElementById("modalContent").classList.remove("max-w-4xl");
-                document.getElementById("modalContent").classList.add("max-w-md");
-            });
-        
-            // Function to submit credentials to a specific patient
-            function submitCredentialsToPatient(patient) {
-                const data = {
-                    date: document.getElementById("date").value,
-                    time: document.getElementById("time").value,
-                    bloodPressure: document.getElementById("bloodPressure").value,
-                    temperature: document.getElementById("temperature").value,
-                    pulseRate: document.getElementById("pulseRate").value,
-                    respiratoryRate: document.getElementById("respiratoryRate").value,
-                    oxygenSaturation: document.getElementById("oxygenSaturation").value,
-                    painScale: document.getElementById("painScale").value,
-                };
-        
-                const patients = JSON.parse(localStorage.getItem("patients")) || [];
-        
-                const updatedPatients = patients.map(p => {
-                    if (p.id === patient.id) {
-                        // Initialize credentials array if missing
-                        if (!Array.isArray(p.credentials)) {
-                            p.credentials = [];
-                        }
-        
-                        // Push the new vital sign record
-                        p.credentials.push(data);
-                    }
-                    return p;
-                });
-        
-                localStorage.setItem("patients", JSON.stringify(updatedPatients));
-        
-                alert(`Credentials submitted to ${patient.name}`);
-                clearInputFields();
-                document.getElementById("modal").classList.add("hidden");
-            }
-        
-            // Function to view patient credentials
-            function viewPatientCredentials(patient) {
-                const patients = JSON.parse(localStorage.getItem("patients")) || [];
-                const current = patients.find(p => p.id === patient.id);
-                const dataList = current?.credentials || [];
-        
-                if (dataList.length === 0) {
-                    document.getElementById("patientHistory").innerHTML = `<p class="text-center">No credentials submitted for ${patient.name}.</p>`;
-                } else {
-                    const groupedData = groupDataByDate(dataList);
-                    const tableContent = generateTableContent(groupedData);
-                    document.getElementById("patientHistory").innerHTML = tableContent;
-                }
-        
-                // Hide the patient list and update modal title
-                document.getElementById("patientList").innerHTML = "";
-                document.getElementById("modalTitle").textContent = `Patient History for ${patient.name}`;
-        
-                // Adjust modal size for viewing patient history
-                document.getElementById("modalContent").classList.remove("max-w-md");
-                document.getElementById("modalContent").classList.add("max-w-4xl");
-            }
-        
-            // Function to group data by date
-            function groupDataByDate(dataList) {
-                return dataList.reduce((acc, data) => {
-                    const date = data.date;
-                    if (!acc[date]) {
-                        acc[date] = [];
-                    }
-                    acc[date].push(data);
-                    return acc;
-                }, {});
-            }
-        
-            // Function to generate table content
-            function generateTableContent(groupedData) {
-                let tableContent = `
-                    <table class="min-w-full bg-white border border-gray-300">
-                        <thead>
-                            <tr>
-                                <th class="py-2 px-4 border-b">Date</th>
-                                <th class="py-2 px-4 border-b">Time</th>
-                                <th class="py-2 px-4 border-b">Blood Pressure</th>
-                                <th class="py-2 px-4 border-b">Temperature</th>
-                                <th class="py-2 px-4 border-b">Pulse Rate</th>
-                                <th class="py-2 px-4 border-b">Respiratory Rate</th>
-                                <th class="py-2 px-4 border-b">Oxygen Saturation</th>
-                                <th class="py-2 px-4 border-b">Pain Scale</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
-        
-                for (const date in groupedData) {
-                    groupedData[date].forEach(data => {
-                        tableContent += `
-                            <tr>
-                                <td class="py-2 px-4 border-b">${date}</td>
-                                <td class="py-2 px-4 border-b">${data.time}</td>
-                                <td class="py-2 px-4 border-b">${data.bloodPressure}</td>
-                                <td class="py-2 px-4 border-b">${data.temperature}</td>
-                                <td class="py-2 px-4 border-b">${data.pulseRate}</td>
-                                <td class="py-2 px-4 border-b">${data.respiratoryRate}</td>
-                                <td class="py-2 px-4 border-b">${data.oxygenSaturation}</td>
-                                <td class="py-2 px-4 border-b">${data.painScale}</td>
-                            </tr>
-                        `;
-                    });
-                }
-        
-                tableContent += `
-                        </tbody>
-                    </table>
-                `;
-        
-                return tableContent;
-            }
-        
-            // Function to clear input fields
-            function clearInputFields() {
-                const inputFields = document.querySelectorAll('input');
-                inputFields.forEach(field => {
-                    field.value = '';
-                    field.classList.remove("border-red-500");
-                    field.classList.add("border-blue-700");
-                });
-            }
+            </div>
+
+            <!-- Vital Signs Graph -->
+            <div class="mb-6">
+                <canvas id="vitalSignsChart" width="400" height="200"></canvas>
+            </div>
+
+            <!-- Vital Signs Inputs -->
+            <div class="grid grid-cols-3 gap-6">
+                <div>
+                    <label for="bloodPressure" class="block text-blue-900 font-semibold">Blood Pressure</label>
+                    <input type="text" id="bloodPressure" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
+                </div>
+                <div>
+                    <label for="temperature" class="block text-blue-900 font-semibold">Temperature</label>
+                    <input type="number" id="temperature" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
+                </div>
+                <div>
+                    <label for="pulseRate" class="block text-blue-900 font-semibold">Pulse Rate</label>
+                    <input type="number" id="pulseRate" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
+                </div>
+                <div>
+                    <label for="respiratoryRate" class="block text-blue-900 font-semibold">Respiratory Rate</label>
+                    <input type="number" id="respiratoryRate" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
+                </div>
+                <div>
+                    <label for="oxygenSaturation" class="block text-blue-900 font-semibold">Oxygen Saturation</label>
+                    <input type="number" id="oxygenSaturation" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
+                </div>
+                <div>
+                    <label for="painScale" class="block text-blue-900 font-semibold">Pain Scale</label>
+                    <input type="text" id="painScale" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
+                </div>
+            </div>
+
+            <!-- Submit and View History Buttons -->
+            <div class="mt-8 text-right flex justify-end space-x-2">
+                <button id="submitVitalsButton" class="bg-blue-700 text-white font-semibold px-6 py-2 rounded hover:bg-blue-800">Submit Credentials</button>
+                <button id="viewHistoryButton" class="bg-blue-700 text-white font-semibold px-6 py-2 rounded hover:bg-blue-800">View Patient History</button>
+            </div>
+        </div>
+
+        <!-- Modal Structure -->
+        <div id="modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+            <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl p-4 relative" id="modalContent">
+                <button id="closeModal" class="absolute top-2 right-2 text-black text-2xl font-bold">&times;</button>
+                <!-- Patient List -->
+                <div class="overflow-y-auto">
+                    <h3 class="text-2xl font-bold text-blue-900 mb-4 text-center" id="modalTitle">Patients</h3>
+                    <ul id="patientList" class="space-y-2"></ul>
+                    <div id="patientHistory"></div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    setActiveButtons(vitalBtn);
+
+    let patientCredentials = {};
+
+    // Validation Helpers
+    const setInvalidStyle = (input) => {
+        input.classList.remove("border-blue-700");
+        input.classList.add("border-red-500");
+    };
+
+    const setValidStyle = (input) => {
+        input.classList.remove("border-red-500");
+        input.classList.add("border-blue-700");
+    };
+
+    // Temperature validation
+    const temperatureInput = document.getElementById("temperature");
+    temperatureInput.addEventListener("input", () => {
+        const val = parseFloat(temperatureInput.value);
+        if (!isNaN(val) && (val < 36.5 || val > 37.5)) {
+            setInvalidStyle(temperatureInput);
+        } else {
+            setValidStyle(temperatureInput);
         }
+    });
+
+    // Blood Pressure validation (mark below 120/80 as "not good")
+    const bloodPressureInput = document.getElementById("bloodPressure");
+    bloodPressureInput.addEventListener("input", () => {
+        const value = bloodPressureInput.value.trim();
+        const pattern = /^\d{2,3}\/\d{2,3}$/;
+
+        if (!pattern.test(value)) {
+            setInvalidStyle(bloodPressureInput);
+            return;
+        }
+
+        const [sys, dia] = value.split('/').map(Number);
+        if (sys < 120 || dia < 80) {
+            setInvalidStyle(bloodPressureInput);
+        } else {
+            setValidStyle(bloodPressureInput);
+        }
+    });
+
+    // Pulse Rate validation
+    const pulseRateInput = document.getElementById("pulseRate");
+    pulseRateInput.addEventListener("input", () => {
+        const val = parseFloat(pulseRateInput.value);
+        if (!isNaN(val) && (val < 60 || val > 100)) {
+            setInvalidStyle(pulseRateInput);
+        } else {
+            setValidStyle(pulseRateInput);
+        }
+    });
+
+    // Respiratory Rate validation
+    const respiratoryRateInput = document.getElementById("respiratoryRate");
+    respiratoryRateInput.addEventListener("input", () => {
+        const val = parseFloat(respiratoryRateInput.value);
+        if (!isNaN(val) && (val < 16 || val > 20)) {
+            setInvalidStyle(respiratoryRateInput);
+        } else {
+            setValidStyle(respiratoryRateInput);
+        }
+    });
+
+    // Oxygen Saturation validation
+    const oxygenSaturationInput = document.getElementById("oxygenSaturation");
+    oxygenSaturationInput.addEventListener("input", () => {
+        const val = parseFloat(oxygenSaturationInput.value);
+        if (!isNaN(val) && (val < 95 || val > 100)) {
+            setInvalidStyle(oxygenSaturationInput);
+        } else {
+            setValidStyle(oxygenSaturationInput);
+        }
+    });
+
+    // Submit Credentials Button
+    document.getElementById("submitVitalsButton").addEventListener("click", function() {
+        const requiredFields = ["date", "time", "bloodPressure", "temperature", "pulseRate", "respiratoryRate", "oxygenSaturation", "painScale"];
+        let isValid = true;
+
+        requiredFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (!field.value.trim()) {
+                isValid = false;
+            }
+        });
+
+        if (!isValid) {
+            alert("Please fill out all required fields before submitting.");
+            return;
+        }
+
+        const patients = JSON.parse(localStorage.getItem("patients")) || [];
+        const patientListContainer = document.getElementById("patientList");
+        patientListContainer.innerHTML = ""; // Clear any previous list
+
+        if (patients.length > 0) {
+            patients.forEach(patient => {
+                const listItem = document.createElement("li");
+                listItem.textContent = patient.name;
+                listItem.classList.add("cursor-pointer", "text-blue-600", "hover:underline", "text-center", "p-2", "border", "rounded");
+                listItem.addEventListener("click", () => submitCredentialsToPatient(patient));
+                patientListContainer.appendChild(listItem);
+            });
+        } else {
+            patientListContainer.innerHTML = "<p class='text-center'>No patients found.</p>";
+        }
+
+        // Show the modal
+        document.getElementById("modal").classList.remove("hidden");
+        document.getElementById("modalTitle").textContent = "Select Patient";
+        document.getElementById("patientHistory").innerHTML = ""; // Clear any previous history
+    });
+
+    // View Patient History Button
+    document.getElementById("viewHistoryButton").addEventListener("click", function() {
+        const patients = JSON.parse(localStorage.getItem("patients")) || [];
+        const patientListContainer = document.getElementById("patientList");
+        patientListContainer.innerHTML = ""; // Clear any previous list
+
+        if (patients.length > 0) {
+            patients.forEach(patient => {
+                const listItem = document.createElement("li");
+                listItem.textContent = patient.name;
+                listItem.classList.add("cursor-pointer", "text-blue-600", "hover:underline", "text-center", "p-2", "border", "rounded");
+                listItem.addEventListener("click", () => viewPatientCredentials(patient));
+                patientListContainer.appendChild(listItem);
+            });
+        } else {
+            patientListContainer.innerHTML = "<p class='text-center'>No patients found.</p>";
+        }
+
+        // Show the modal
+        document.getElementById("modal").classList.remove("hidden");
+        document.getElementById("modalTitle").textContent = "Select Patient";
+        document.getElementById("patientHistory").innerHTML = ""; // Clear any previous history
+    });
+
+    document.getElementById("closeModal").addEventListener("click", function() {
+        // Clear input fields
+        clearInputFields();
+        // Hide the modal
+        document.getElementById("modal").classList.add("hidden");
+        // Reset modal title and content
+        document.getElementById("modalTitle").textContent = "Patients";
+        document.getElementById("patientList").innerHTML = "";
+        document.getElementById("patientHistory").innerHTML = "";
+        // Reset modal size
+        document.getElementById("modalContent").classList.remove("max-w-4xl");
+        document.getElementById("modalContent").classList.add("max-w-md");
+    });
+
+    // Function to submit credentials to a specific patient
+    function submitCredentialsToPatient(patient) {
+        const data = {
+            date: document.getElementById("date").value,
+            time: document.getElementById("time").value,
+            bloodPressure: document.getElementById("bloodPressure").value,
+            temperature: document.getElementById("temperature").value,
+            pulseRate: document.getElementById("pulseRate").value,
+            respiratoryRate: document.getElementById("respiratoryRate").value,
+            oxygenSaturation: document.getElementById("oxygenSaturation").value,
+            painScale: document.getElementById("painScale").value,
+        };
+
+        const patients = JSON.parse(localStorage.getItem("patients")) || [];
+
+        const updatedPatients = patients.map(p => {
+            if (p.id === patient.id) {
+                // Initialize credentials array if missing
+                if (!Array.isArray(p.credentials)) {
+                    p.credentials = [];
+                }
+
+                // Push the new vital sign record
+                p.credentials.push(data);
+            }
+            return p;
+        });
+
+        localStorage.setItem("patients", JSON.stringify(updatedPatients));
+
+        alert(`Credentials submitted to ${patient.name}`);
+        clearInputFields();
+        document.getElementById("modal").classList.add("hidden");
+        updateChart(data); // Update the chart with new data
+    }
+
+    // Function to view patient credentials
+    function viewPatientCredentials(patient) {
+        const patients = JSON.parse(localStorage.getItem("patients")) || [];
+        const current = patients.find(p => p.id === patient.id);
+        const dataList = current?.credentials || [];
+
+        if (dataList.length === 0) {
+            document.getElementById("patientHistory").innerHTML = `<p class="text-center">No credentials submitted for ${patient.name}.</p>`;
+        } else {
+            const groupedData = groupDataByDate(dataList);
+            const tableContent = generateTableContent(groupedData);
+            document.getElementById("patientHistory").innerHTML = tableContent;
+            updateChart(dataList[dataList.length - 1]); // Update the chart with the latest data
+        }
+
+        // Hide the patient list and update modal title
+        document.getElementById("patientList").innerHTML = "";
+        document.getElementById("modalTitle").textContent = `Patient History for ${patient.name}`;
+
+        // Adjust modal size for viewing patient history
+        document.getElementById("modalContent").classList.remove("max-w-md");
+        document.getElementById("modalContent").classList.add("max-w-4xl");
+    }
+
+    // Function to group data by date
+    function groupDataByDate(dataList) {
+        return dataList.reduce((acc, data) => {
+            const date = data.date;
+            if (!acc[date]) {
+                acc[date] = [];
+            }
+            acc[date].push(data);
+            return acc;
+        }, {});
+    }
+
+    // Function to generate table content
+    function generateTableContent(groupedData) {
+        let tableContent = `
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-4 border-b">Date</th>
+                        <th class="py-2 px-4 border-b">Time</th>
+                        <th class="py-2 px-4 border-b">Blood Pressure</th>
+                        <th class="py-2 px-4 border-b">Temperature</th>
+                        <th class="py-2 px-4 border-b">Pulse Rate</th>
+                        <th class="py-2 px-4 border-b">Respiratory Rate</th>
+                        <th class="py-2 px-4 border-b">Oxygen Saturation</th>
+                        <th class="py-2 px-4 border-b">Pain Scale</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        for (const date in groupedData) {
+            groupedData[date].forEach(data => {
+                tableContent += `
+                    <tr>
+                        <td class="py-2 px-4 border-b">${date}</td>
+                        <td class="py-2 px-4 border-b">${data.time}</td>
+                        <td class="py-2 px-4 border-b">${data.bloodPressure}</td>
+                        <td class="py-2 px-4 border-b">${data.temperature}</td>
+                        <td class="py-2 px-4 border-b">${data.pulseRate}</td>
+                        <td class="py-2 px-4 border-b">${data.respiratoryRate}</td>
+                        <td class="py-2 px-4 border-b">${data.oxygenSaturation}</td>
+                        <td class="py-2 px-4 border-b">${data.painScale}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        tableContent += `
+                </tbody>
+            </table>
+        `;
+
+        return tableContent;
+    }
+
+    // Function to clear input fields
+    function clearInputFields() {
+        const inputFields = document.querySelectorAll('input');
+        inputFields.forEach(field => {
+            field.value = '';
+            field.classList.remove("border-red-500");
+            field.classList.add("border-blue-700");
+        });
+    }
+
+    // Function to update the chart
+    function updateChart(data) {
+        const ctx = document.getElementById('vitalSignsChart').getContext('2d');
+        const chartData = {
+            labels: ['Blood Pressure', 'Temperature', 'Pulse Rate', 'Respiratory Rate', 'Oxygen Saturation', 'Pain Scale'],
+            datasets: [{
+                label: 'Vital Signs',
+                data: [
+                    parseInt(data.bloodPressure.split('/')[0]), // Systolic Blood Pressure
+                    data.temperature,
+                    data.pulseRate,
+                    data.respiratoryRate,
+                    data.oxygenSaturation,
+                    parseInt(data.painScale)
+                ],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)', // Blood Pressure
+                    'rgba(54, 162, 235, 0.2)', // Temperature
+                    'rgba(255, 206, 86, 0.2)', // Pulse Rate
+                    'rgba(75, 192, 192, 0.2)', // Respiratory Rate
+                    'rgba(153, 102, 255, 0.2)', // Oxygen Saturation
+                    'rgba(255, 159, 64, 0.2)'  // Pain Scale
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        const config = {
+            type: 'bar',
+            data: chartData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        new Chart(ctx, config);
+    }
+
+    // Initialize the chart with default data
+    updateChart({
+        bloodPressure: '120/80',
+        temperature: 37,
+        pulseRate: 72,
+        respiratoryRate: 18,
+        oxygenSaturation: 98,
+        painScale: '0'
+    });
+}
+
         
         
         
@@ -4390,6 +4458,24 @@
                 }
                 if (!bell.contains(event.target) && !bellDropdown.contains(event.target)) {
                     bellDropdown.classList.add("hidden");
+                }
+            });
+
+            // Logout Button Click Event
+            if (logoutBtn) {
+                logoutBtn.addEventListener("click", function () {
+                    window.location.href = "login.html"; // Redirect to login page
+                });
+            }
+        });
+
+
+
+
+
+
+
+      bellDropdown.classList.add("hidden");
                 }
             });
 
