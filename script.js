@@ -1739,37 +1739,30 @@
                 </div>
             </div>
 
-            <!-- Vital Signs Graph -->
+            <!-- Vital Signs Table -->
             <div class="mb-6">
-                <canvas id="vitalSignsChart" width="400" height="200"></canvas>
-            </div>
-
-            <!-- Vital Signs Inputs -->
-            <div class="grid grid-cols-3 gap-6">
-                <div>
-                    <label for="bloodPressure" class="block text-blue-900 font-semibold">Blood Pressure</label>
-                    <input type="text" id="bloodPressure" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
-                </div>
-                <div>
-                    <label for="temperature" class="block text-blue-900 font-semibold">Temperature</label>
-                    <input type="number" id="temperature" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
-                </div>
-                <div>
-                    <label for="pulseRate" class="block text-blue-900 font-semibold">Pulse Rate</label>
-                    <input type="number" id="pulseRate" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
-                </div>
-                <div>
-                    <label for="respiratoryRate" class="block text-blue-900 font-semibold">Respiratory Rate</label>
-                    <input type="number" id="respiratoryRate" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
-                </div>
-                <div>
-                    <label for="oxygenSaturation" class="block text-blue-900 font-semibold">Oxygen Saturation</label>
-                    <input type="number" id="oxygenSaturation" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
-                </div>
-                <div>
-                    <label for="painScale" class="block text-blue-900 font-semibold">Pain Scale</label>
-                    <input type="text" id="painScale" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300">
-                </div>
+                <table class="min-w-full bg-white border border-gray-300">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4 border-b">Blood Pressure</th>
+                            <th class="py-2 px-4 border-b">Temperature</th>
+                            <th class="py-2 px-4 border-b">Pulse Rate</th>
+                            <th class="py-2 px-4 border-b">Respiratory Rate</th>
+                            <th class="py-2 px-4 border-b">Oxygen Saturation</th>
+                            <th class="py-2 px-4 border-b">Pain Scale</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="py-2 px-4 border-b"><input type="text" id="bloodPressure" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                            <td class="py-2 px-4 border-b"><input type="number" id="temperature" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                            <td class="py-2 px-4 border-b"><input type="number" id="pulseRate" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                            <td class="py-2 px-4 border-b"><input type="number" id="respiratoryRate" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                            <td class="py-2 px-4 border-b"><input type="number" id="oxygenSaturation" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                            <td class="py-2 px-4 border-b"><input type="text" id="painScale" class="w-full p-2 border border-blue-700 rounded focus:ring focus:ring-blue-300"></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <!-- Submit and View History Buttons -->
@@ -1981,7 +1974,6 @@
         alert(`Credentials submitted to ${patient.name}`);
         clearInputFields();
         document.getElementById("modal").classList.add("hidden");
-        updateChart(data); // Update the chart with new data
     }
 
     // Function to view patient credentials
@@ -1996,7 +1988,6 @@
             const groupedData = groupDataByDate(dataList);
             const tableContent = generateTableContent(groupedData);
             document.getElementById("patientHistory").innerHTML = tableContent;
-            updateChart(dataList); // Update the chart with the latest data
         }
 
         // Hide the patient list and update modal title
@@ -2073,93 +2064,6 @@
             field.classList.add("border-blue-700");
         });
     }
-
-    // Function to update the chart
-    function updateChart(dataList) {
-        const ctx = document.getElementById('vitalSignsChart').getContext('2d');
-
-        // Prepare data for the chart
-        const chartData = {
-            labels: dataList.map(data => `${data.date} ${data.time}`),
-            datasets: [
-                {
-                    label: 'Blood Pressure (Systolic)',
-                    data: dataList.map(data => parseInt(data.bloodPressure.split('/')[0])),
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    fill: false,
-                },
-                {
-                    label: 'Temperature',
-                    data: dataList.map(data => data.temperature),
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    fill: false,
-                },
-                {
-                    label: 'Pulse Rate',
-                    data: dataList.map(data => data.pulseRate),
-                    borderColor: 'rgba(255, 206, 86, 1)',
-                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                    fill: false,
-                },
-                {
-                    label: 'Respiratory Rate',
-                    data: dataList.map(data => data.respiratoryRate),
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    fill: false,
-                },
-                {
-                    label: 'Oxygen Saturation',
-                    data: dataList.map(data => data.oxygenSaturation),
-                    borderColor: 'rgba(153, 102, 255, 1)',
-                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                    fill: false,
-                },
-                {
-                    label: 'Pain Scale',
-                    data: dataList.map(data => parseInt(data.painScale)),
-                    borderColor: 'rgba(255, 159, 64, 1)',
-                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                    fill: false,
-                }
-            ]
-        };
-
-        const config = {
-            type: 'line',
-            data: chartData,
-            options: {
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'hour'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Time'
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Value'
-                        }
-                    }
-                }
-            }
-        };
-
-        new Chart(ctx, config);
-    }
-
-    // Initialize the chart with default data
-    updateChart([
-        { date: '2025-04-04', time: '08:00', bloodPressure: '120/80', temperature: 37, pulseRate: 72, respiratoryRate: 18, oxygenSaturation: 98, painScale: '0' },
-        { date: '2025-04-04', time: '12:00', bloodPressure: '115/75', temperature: 36.8, pulseRate: 70, respiratoryRate: 17, oxygenSaturation: 97, painScale: '1' }
-    ]);
 }
 
 
